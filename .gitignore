@@ -1,3 +1,4 @@
+*.tsv
 # Xcode
 !**/*.xcodeproj
 !**/*.pbxproj
