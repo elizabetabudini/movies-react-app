@@ -2,24 +2,24 @@ import React, {Component} from 'react';
 import {StyleSheet, View, TextInput} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-class PasswordTextbox extends Component {
-  render() {
-    return (
-      <View style={[styles.container, this.props.style]}>
-        <Icon name="key" style={styles.iconStyle} />
-        <TextInput
-          placeholder="Password"
-          secureTextEntry={true}
-          style={styles.inputStyle}
-        />
-      </View>
-    );
-  }
+function TextBox(props) {
+  return (
+    <View style={[styles.container, props.style]}>
+      <Icon name={props.iconName || 'account'} style={styles.iconStyle} />
+      <TextInput
+        placeholder={props.placeholder || 'Email'}
+        keyboardType={props.keyboard || 'default'}
+        secureTextEntry={props.secure || false}
+        clearButtonMode="while-editing"
+        style={styles.inputStyle}
+      />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'rgba(235,235,235,1)',
+    backgroundColor: 'transparent',
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -30,9 +30,10 @@ const styles = StyleSheet.create({
     paddingLeft: 8,
   },
   inputStyle: {
-    flex: 1,
+    //style of the line below input field
+    width: '80%',
+    height: 43,
     color: '#000',
-    alignSelf: 'stretch',
     marginLeft: 16,
     paddingTop: 14,
     paddingRight: 5,
@@ -45,4 +46,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PasswordTextbox;
+export default TextBox;

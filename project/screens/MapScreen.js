@@ -1,10 +1,7 @@
 import React, {Component} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import MaterialMapView from '../components/MaterialMapView';
 import {Center} from '@builderx/utils';
-import MaterialButtonPrimary from '../components/MaterialButtonPrimary';
-import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
 
 class MapScreen extends Component {
   render() {
@@ -15,7 +12,7 @@ class MapScreen extends Component {
           <MaterialMapView style={styles.materialMapView} />
         </View>
         <Center horizontal>
-          <MaterialButtonPrimary text1="Back" style={styles.googlebtn} />
+          <TouchableOpacity text1="Back" style={styles.googlebtn} />
         </Center>
       </View>
     );

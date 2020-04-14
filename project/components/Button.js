@@ -1,25 +1,19 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, TouchableOpacity} from 'react-native';
+import {StyleSheet, TouchableOpacity, Text} from 'react-native';
 
-class MaterialButtonLight extends Component {
-  static displayName = 'Button';
-
-  render() {
-    let opacity = this.props.disabled ? 1 : 0.5;
-    return (
-      <TouchableOpacity
-        activeOpacity={opacity}
-        onPress={this.props.onPress}
-        style={[styles.container, this.props.style]}>
-        {this.props.children}
-      </TouchableOpacity>
-    );
-  }
+function Button(props) {
+  return (
+    <TouchableOpacity
+      /* Conditional navigation not supported at the moment */ style={[
+        styles.container,
+        props.style,
+      ]}>
+      <Text
+          style={styles.caption}>{props.text1 || 'Log in'}
+      </Text>
+    </TouchableOpacity>
+  );
 }
-
-MaterialButtonLight.defaultProps = {disabled: false};
-
-export default MaterialButtonLight;
 
 const styles = StyleSheet.create({
   container: {
@@ -46,3 +40,5 @@ const styles = StyleSheet.create({
     fontFamily: 'roboto-regular',
   },
 });
+
+export default Button;

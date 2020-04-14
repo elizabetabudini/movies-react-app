@@ -5,11 +5,6 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
-    <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value=""/>
-
-
     <application
       android:name=".MainApplication"
       android:label="@string/app_name"
@@ -29,6 +24,10 @@
         </intent-filter>
       </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+
+        <meta-data
+                android:name="com.google.android.geo.API_KEY"
+                android:value="AIzaSyBGh-pc83UewS7BTJ3pygMMJLz3FDdtKrs"/>
     </application>
 
 </manifest>

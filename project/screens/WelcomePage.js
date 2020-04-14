@@ -1,50 +1,72 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  TextInput,
+} from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import Svg, {Ellipse} from 'react-native-svg';
-import EmailTextbox from '../components/EmailTextbox';
-import PasswordTextbox from '../components/PasswordTextbox';
-import MaterialButtonLight from '../components/MaterialButtonLight';
-import MaterialButtonPrimary from '../components/MaterialButtonPrimary';
-
+import TextBox from '../components/TextBox';
+import Button from '../components/Button';
 
 class WelcomePage extends Component {
   _login = () => {
-    console.warn('Actual map not implemented');
-    this.props.navigation.navigate('Map');
+    this.props.navigation.navigate('Profile');
   };
+  _googlelogin = () => {
+    this.props.navigation.navigate('Profile');
+  };
+
   render() {
+    const google_button = (
+      <Icon.Button name="google" onPress={() => {}}>
+        <Text style={{color: 'rgba(255,255,255,1)'}}>Continue with Google</Text>
+      </Icon.Button>
+    );
     return (
       <View style={styles.container}>
-        <View style={styles.rect2} />
-        <View style={styles.group3}>
-          <View style={styles.group5}>
-            <View style={styles.group2}>
-              <View style={styles.rect3}>
-                <Svg viewBox="0 0 59.95 60.34" style={styles.ellipse}>
-                  <Ellipse
-                    strokeWidth={1}
-                    fill="rgba(205,214,222,1)"
-                    stroke="rgba(230, 230, 230,1)"
-                    cx={30}
-                    cy={30}
-                    rx={29}
-                    ry={30}
-                  />
-                </Svg>
-                <Text style={styles.welcome}>Welcome!</Text>
-                <EmailTextbox style={styles.email} />
-                <PasswordTextbox style={styles.password} />
-                <View style={styles.group4}>
-                  <Text style={styles.createAccount}>Create account</Text>
-                  <Text style={styles.forgotPassword}>Forgot password?</Text>
-                </View>
-                <MaterialButtonLight
-                  style={styles.loginbtn}
-                  onPress={this._login}
-                />
-              </View>
-            </View>
-            <MaterialButtonPrimary style={styles.googlebtn} />
+        <View style={styles.formBack}>
+          <View style={styles.ellipseColumn}>
+            <Svg viewBox="0 0 59.95 60.34" style={styles.ellipse}>
+              <Ellipse
+                strokeWidth={1}
+                fill="rgba(205,214,222,1)"
+                stroke="rgba(230, 230, 230,1)"
+                cx={30}
+                cy={30}
+                rx={29}
+                ry={30}
+              />
+            </Svg>
+            <Text style={styles.welcomeText}>Welcome!</Text>
+            <TextBox
+              placeholder="Email"
+              iconName="account"
+              keyboard="email-address" //keyboard with @
+              textContentType="emailAddress"
+              style={styles.emailBox}
+            />
+            <TextBox
+              placeholder="Password"
+              iconName="lock"
+              style={styles.passwordBox}
+              secure={true}
+            />
+            <Button
+              button1="WelcomePage"
+              text1="Log in"
+              style={styles.loginButton}
+            />
+            <TouchableOpacity style={styles.googleButton}>
+              {google_button}
+            </TouchableOpacity>
+          </View>
+          <View style={styles.ellipseColumnFiller} />
+          <View style={styles.helpFooter}>
+            <Text style={styles.createAccount}>Create account</Text>
+            <Text style={styles.forgotPassword}>Forgot password?</Text>
           </View>
         </View>
       </View>
@@ -57,94 +79,74 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(38,64,74,1)',
   },
-  rect2: {
-    flex: 1.13,
-    backgroundColor: 'rgba(38,64,74,1)',
-    alignSelf: 'stretch',
-  },
-  group3: {
-    top: 160,
-    left: 30,
-    flex: -0.13,
-    position: 'absolute',
-    right: 30,
-    bottom: 160,
-    justifyContent: 'center',
-  },
-  group5: {
-    width: 322,
-    height: 420,
-    alignSelf: 'center',
-  },
-  group2: {
-    height: 384,
-  },
-  rect3: {
-    height: 315,
+  formBack: {
+    width: '90%',
+    height: 380,
     backgroundColor: 'rgba(255,255,255,1)',
-    marginTop: 16,
+    marginTop: 50,
+    alignSelf: 'center',
+    position: 'relative',
   },
   ellipse: {
     width: 60,
     height: 60,
-    marginTop: -28,
-    alignSelf: 'center',
+    alignSelf: 'center'
   },
-  welcome: {
+  welcomeText: {
     color: 'rgba(38,64,74,1)',
     fontSize: 30,
     fontFamily: 'calibri-regular',
-    marginTop: 16,
-    alignSelf: 'center',
+    marginTop: 22,
+    alignSelf: 'center'
   },
-  email: {
-    width: 283,
-    height: 39,
+  emailBox: {
+    width: '95%',
+    height: 50,
     backgroundColor: 'rgba(235,235,235,1)',
-    marginTop: 27,
+    marginTop: 50,
+    alignSelf: 'center'
+  },
+  passwordBox: {
+    width: '95%',
+    height: 50,
+    backgroundColor: 'rgba(235,235,235,1)',
+    marginTop: 17,
     alignSelf: 'center',
   },
-  password: {
-    width: 283,
-    height: 43,
-    marginTop: 13,
-    marginLeft: 19,
+  loginButton: {
+    width: '90%',
+    height: 50,
+    alignSelf: 'center',
   },
-  group4: {
-    width: 189,
-    height: 13,
+  googleButton: {
+    marginTop: 95,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+  },
+  ellipseColumn: {
+    width: 282,
+    marginTop: -30, //center of the circle in the line of the container form
+  },
+  ellipseColumnFiller: {
+    flex: 1,
+  },
+  helpFooter: {
+    width: 241,
+    height: 20,
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 21,
+    justifyContent: 'space-around',
     alignSelf: 'center',
   },
   createAccount: {
-    width: 79,
-    height: 13,
     color: 'rgba(38,64,74,1)',
-    flexWrap: 'wrap',
-    fontSize: 13,
-    fontFamily: 'calibri-regular',
-    textDecorationLine: 'underline',
+    alignSelf: 'flex-start',
+    fontFamily: 'roboto-regular',
   },
   forgotPassword: {
-    width: 94,
-    height: 13,
     color: 'rgba(38,64,74,1)',
-    fontSize: 13,
-    fontFamily: 'calibri-regular',
-    textDecorationLine: 'underline',
-  },
-  loginbtn: {
-    width: 123,
-    height: 36,
-    marginTop: 32,
-    alignSelf: 'center',
-  },
-  googlebtn: {
-    width: 267,
-    height: 37,
-    marginLeft: 27,
+    alignSelf: 'flex-start',
+    fontFamily: 'roboto-regular',
   },
 });
 
