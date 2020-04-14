@@ -1,75 +1,114 @@
-import React, {Component} from 'react';
+import * as React from 'react';
 import {
+  Image,
+  KeyboardAvoidingView,
   StyleSheet,
   View,
+  StatusBar,
   Text,
-  TouchableOpacity,
-  TextInput,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import Svg, {Ellipse} from 'react-native-svg';
-import TextBox from '../components/TextBox';
-import Button from '../components/Button';
+import Button1 from '../components/Button1';
+import FormTextInput from '../components/FormTextInput';
+import imageLogo from '../assets/images/logo.png';
+import colors from '../config/colors';
+import strings from '../config/strings';
+import constants from '../config/constants';
 
-class WelcomePage extends Component {
-  _login = () => {
-    this.props.navigation.navigate('Profile');
-  };
-  _googlelogin = () => {
-    this.props.navigation.navigate('Profile');
+interface State {
+  email: string;
+  password: string;
+  emailTouched: boolean;
+  passwordTouched: boolean;
+}
+
+class WelcomeScreen extends React.Component<{}, State> {
+  passwordInputRef = React.createRef();
+
+  state: State = {
+    email: '',
+    password: '',
+    emailTouched: false,
+    passwordTouched: false,
   };
 
+  handleEmailChange = (email: string) => {
+    this.setState({email: email});
+  };
+
+  handlePasswordChange = (password: string) => {
+    this.setState({password: password});
+  };
+
+  handleEmailSubmitPress = () => {
+    if (this.passwordInputRef.current) {
+      this.passwordInputRef.current.focus();
+    }
+  };
+
+  handleEmailBlur = () => {
+    this.setState({emailTouched: true});
+  };
+
+  handlePasswordBlur = () => {
+    this.setState({passwordTouched: true});
+  };
+
+  handleLoginPress = () => {
+    console.log('Login button pressed');
+  };
+
+  //modiefied from https://github.com/mmazzarolo/the-starter-app/
   render() {
-    const google_button = (
-      <Icon.Button name="google" onPress={() => {}}>
-        <Text style={{color: 'rgba(255,255,255,1)'}}>Continue with Google</Text>
-      </Icon.Button>
-    );
+    const {email, password, emailTouched, passwordTouched} = this.state;
+    const emailError =
+      !email && emailTouched ? strings.EMAIL_REQUIRED : undefined;
+    const passwordError =
+      !password && passwordTouched ? strings.PASSWORD_REQUIRED : undefined;
     return (
-      <View style={styles.container}>
-        <View style={styles.formBack}>
-          <View style={styles.ellipseColumn}>
-            <Svg viewBox="0 0 59.95 60.34" style={styles.ellipse}>
-              <Ellipse
-                strokeWidth={1}
-                fill="rgba(205,214,222,1)"
-                stroke="rgba(230, 230, 230,1)"
-                cx={30}
-                cy={30}
-                rx={29}
-                ry={30}
-              />
-            </Svg>
-            <Text style={styles.welcomeText}>Welcome!</Text>
-            <TextBox
-              placeholder="Email"
-              iconName="account"
-              keyboard="email-address" //keyboard with @
-              textContentType="emailAddress"
-              style={styles.emailBox}
-            />
-            <TextBox
-              placeholder="Password"
-              iconName="lock"
-              style={styles.passwordBox}
-              secure={true}
-            />
-            <Button
-              button1="WelcomePage"
-              text1="Log in"
-              style={styles.loginButton}
-            />
-            <TouchableOpacity style={styles.googleButton}>
-              {google_button}
-            </TouchableOpacity>
-          </View>
-          <View style={styles.ellipseColumnFiller} />
-          <View style={styles.helpFooter}>
-            <Text style={styles.createAccount}>Create account</Text>
-            <Text style={styles.forgotPassword}>Forgot password?</Text>
-          </View>
+      <KeyboardAvoidingView
+        style={styles.container}
+        // Prevent Android from handling the keyboard behaviour
+        behavior={constants.IS_IOS ? 'padding' : undefined}>
+        <Image source={imageLogo} style={styles.logo} />
+        <View style={styles.form}>
+          <FormTextInput
+            iconName="account"
+            value={this.state.email}
+            onChangeText={this.handleEmailChange}
+            onSubmitEditing={this.handleEmailSubmitPress}
+            placeholder={strings.EMAIL_PLACEHOLDER}
+            autoCorrect={false}
+            keyboardType="email-address"
+            returnKeyType="next"
+            onBlur={this.handleEmailBlur}
+            error={emailError}
+            blurOnSubmit={constants.IS_IOS}
+          />
+          <FormTextInput
+            iconName="lock"
+            ref={this.passwordInputRef}
+            value={this.state.password}
+            onChangeText={this.handlePasswordChange}
+            placeholder={strings.PASSWORD_PLACEHOLDER}
+            secureTextEntry={true}
+            returnKeyType="done"
+            onBlur={this.handlePasswordBlur}
+            error={passwordError}
+          />
+          <Button1
+            label={strings.LOGIN}
+            onPress={this.handleLoginPress}
+            disabled={!email || !password}
+          />
+
+          <Button1
+            iconName="google"
+            label={strings.GOOGLE_LOGIN}
+            onPress={this.handleLoginPress}
+            style={{backgroundColor: colors.LIGHT_GRAY}}
+          />
         </View>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }
@@ -77,77 +116,21 @@ class WelcomePage extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'rgba(38,64,74,1)',
-  },
-  formBack: {
-    width: '90%',
-    height: 380,
-    backgroundColor: 'rgba(255,255,255,1)',
-    marginTop: 50,
-    alignSelf: 'center',
-    position: 'relative',
-  },
-  ellipse: {
-    width: 60,
-    height: 60,
-    alignSelf: 'center'
-  },
-  welcomeText: {
-    color: 'rgba(38,64,74,1)',
-    fontSize: 30,
-    fontFamily: 'calibri-regular',
-    marginTop: 22,
-    alignSelf: 'center'
-  },
-  emailBox: {
-    width: '95%',
-    height: 50,
-    backgroundColor: 'rgba(235,235,235,1)',
-    marginTop: 50,
-    alignSelf: 'center'
-  },
-  passwordBox: {
-    width: '95%',
-    height: 50,
-    backgroundColor: 'rgba(235,235,235,1)',
-    marginTop: 17,
-    alignSelf: 'center',
-  },
-  loginButton: {
-    width: '90%',
-    height: 50,
-    alignSelf: 'center',
-  },
-  googleButton: {
-    marginTop: 95,
-    justifyContent: 'center',
     alignItems: 'center',
-    alignSelf: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: colors.WHITE,
   },
-  ellipseColumn: {
-    width: 282,
-    marginTop: -30, //center of the circle in the line of the container form
-  },
-  ellipseColumnFiller: {
+  logo: {
     flex: 1,
-  },
-  helpFooter: {
-    width: 241,
-    height: 20,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    width: '100%',
+    resizeMode: 'contain',
     alignSelf: 'center',
   },
-  createAccount: {
-    color: 'rgba(38,64,74,1)',
-    alignSelf: 'flex-start',
-    fontFamily: 'roboto-regular',
-  },
-  forgotPassword: {
-    color: 'rgba(38,64,74,1)',
-    alignSelf: 'flex-start',
-    fontFamily: 'roboto-regular',
+  form: {
+    flex: 1,
+    justifyContent: 'center',
+    width: '80%',
   },
 });
 
-export default WelcomePage;
+export default WelcomeScreen;

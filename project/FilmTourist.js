@@ -7,6 +7,8 @@ import ProfileScreen from './screens/ProfileScreen';
 import MoviesScreen from './screens/MoviesScreen';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+console.log(process.env.REACT_APP_GOOGLE_API_KEY)
+
 const AppNavigator = createBottomTabNavigator(
   {
     Welcome: WelcomePage,

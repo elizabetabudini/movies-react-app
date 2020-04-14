@@ -5,6 +5,7 @@ import {
   StyleSheet,
   View,
   StatusBar,
+  Text,
 } from 'react-native';
 import Button1 from '../components/Button1';
 import FormTextInput from '../components/FormTextInput';
@@ -12,6 +13,7 @@ import imageLogo from '../assets/images/logo.png';
 import colors from '../config/colors';
 import strings from '../config/strings';
 import constants from '../config/constants';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 interface State {
   email: string;
@@ -98,9 +100,12 @@ class MoviesScreen extends React.Component<{}, State> {
             onPress={this.handleLoginPress}
             disabled={!email || !password}
           />
+
           <Button1
-            label={strings.GOOGLE_LOGIN}
-            onPress={this.handleLoginPress}
+              iconName="google"
+              label={strings.GOOGLE_LOGIN}
+              onPress={this.handleLoginPress}
+              style={{backgroundColor: colors.LIGHT_GRAY}}
           />
         </View>
       </KeyboardAvoidingView>

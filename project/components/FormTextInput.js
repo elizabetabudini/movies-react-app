@@ -1,3 +1,11 @@
+/**
+ * This class renders the Input text boxes in the login page
+ * and the behaviour of the keyboard in both Android and IOS platforms.
+ * It prevents the keyboard from hiding the input fields in the screen.
+ *
+ * Author: Elizabeta Budini
+ * Date: 12/04/2020
+ */
 import * as React from 'react';
 import {
   NativeSyntheticEvent,
@@ -52,6 +60,7 @@ class FormTextInput extends React.Component<Props, State> {
   };
 
   render() {
+
     // On Android we want to change the color of the input
     // underline when it is focused. To do so this component
     // must be aware of being focused, so we'll use the
