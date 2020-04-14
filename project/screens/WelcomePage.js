@@ -6,40 +6,50 @@ import PasswordTextbox from '../components/PasswordTextbox';
 import MaterialButtonLight from '../components/MaterialButtonLight';
 import MaterialButtonPrimary from '../components/MaterialButtonPrimary';
 
-function WelcomePage(props) {
-  return (
-    <View style={styles.container}>
-      <View style={styles.rect2} />
-      <View style={styles.group3}>
-        <View style={styles.group5}>
-          <View style={styles.group2}>
-            <View style={styles.rect3}>
-              <Svg viewBox="0 0 59.95 60.34" style={styles.ellipse}>
-                <Ellipse
-                  strokeWidth={1}
-                  fill="rgba(205,214,222,1)"
-                  stroke="rgba(230, 230, 230,1)"
-                  cx={30}
-                  cy={30}
-                  rx={29}
-                  ry={30}
+
+class WelcomePage extends Component {
+  _login = () => {
+    console.warn('Actual map not implemented');
+    this.props.navigation.navigate('Map');
+  };
+  render() {
+    return (
+      <View style={styles.container}>
+        <View style={styles.rect2} />
+        <View style={styles.group3}>
+          <View style={styles.group5}>
+            <View style={styles.group2}>
+              <View style={styles.rect3}>
+                <Svg viewBox="0 0 59.95 60.34" style={styles.ellipse}>
+                  <Ellipse
+                    strokeWidth={1}
+                    fill="rgba(205,214,222,1)"
+                    stroke="rgba(230, 230, 230,1)"
+                    cx={30}
+                    cy={30}
+                    rx={29}
+                    ry={30}
+                  />
+                </Svg>
+                <Text style={styles.welcome}>Welcome!</Text>
+                <EmailTextbox style={styles.email} />
+                <PasswordTextbox style={styles.password} />
+                <View style={styles.group4}>
+                  <Text style={styles.createAccount}>Create account</Text>
+                  <Text style={styles.forgotPassword}>Forgot password?</Text>
+                </View>
+                <MaterialButtonLight
+                  style={styles.loginbtn}
+                  onPress={this._login}
                 />
-              </Svg>
-              <Text style={styles.welcome}>Welcome!</Text>
-              <EmailTextbox style={styles.email} />
-              <PasswordTextbox style={styles.password} />
-              <View style={styles.group4}>
-                <Text style={styles.createAccount}>Create account</Text>
-                <Text style={styles.forgotPassword}>Forgot password?</Text>
               </View>
-              <MaterialButtonLight style={styles.loginbtn} />
             </View>
+            <MaterialButtonPrimary style={styles.googlebtn} />
           </View>
-          <MaterialButtonPrimary style={styles.googlebtn} />
         </View>
       </View>
-    </View>
-  );
+    );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -115,7 +125,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     fontSize: 13,
     fontFamily: 'calibri-regular',
-    textDecoration: 'underline',
+    textDecorationLine: 'underline',
   },
   forgotPassword: {
     width: 94,
@@ -123,7 +133,7 @@ const styles = StyleSheet.create({
     color: 'rgba(38,64,74,1)',
     fontSize: 13,
     fontFamily: 'calibri-regular',
-    textDecoration: 'underline',
+    textDecorationLine: 'underline',
   },
   loginbtn: {
     width: 123,

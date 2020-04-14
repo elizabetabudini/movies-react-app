@@ -1,20 +1,32 @@
-import React, { Component } from "react";
-import { StyleSheet, TouchableOpacity, Text } from "react-native";
+import React, {Component} from 'react';
+import {StyleSheet, View, TouchableOpacity} from 'react-native';
 
-function MaterialButtonLight(props) {
-  return (
-    <TouchableOpacity style={[styles.container, props.style]}>
-      <Text style={styles.caption}>Log in</Text>
-    </TouchableOpacity>
-  );
+class MaterialButtonLight extends Component {
+  static displayName = 'Button';
+
+  render() {
+    let opacity = this.props.disabled ? 1 : 0.5;
+    return (
+      <TouchableOpacity
+        activeOpacity={opacity}
+        onPress={this.props.onPress}
+        style={[styles.container, this.props.style]}>
+        {this.props.children}
+      </TouchableOpacity>
+    );
+  }
 }
+
+MaterialButtonLight.defaultProps = {disabled: false};
+
+export default MaterialButtonLight;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "rgba(38,64,74,1)",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: 'rgba(38,64,74,1)',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     paddingRight: 16,
     paddingLeft: 16,
     elevation: 2,
@@ -22,17 +34,15 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     shadowOffset: {
       height: 1,
-      width: 0
+      width: 0,
     },
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOpacity: 0.35,
-    shadowRadius: 5
+    shadowRadius: 5,
   },
   caption: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 14,
-    fontFamily: "roboto-regular"
-  }
+    fontFamily: 'roboto-regular',
+  },
 });
-
-export default MaterialButtonLight;

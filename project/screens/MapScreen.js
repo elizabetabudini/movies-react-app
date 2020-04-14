@@ -3,19 +3,23 @@ import {StyleSheet, View} from 'react-native';
 import MaterialMapView from '../components/MaterialMapView';
 import {Center} from '@builderx/utils';
 import MaterialButtonPrimary from '../components/MaterialButtonPrimary';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 
-function MapScreen(props) {
-  return (
-    <View style={styles.container}>
-      <View style={styles.rect2} />
-      <View style={styles.rect3}>
-        <MaterialMapView style={styles.materialMapView} />
+class MapScreen extends Component {
+  render() {
+    return (
+      <View style={styles.container}>
+        <View style={styles.rect2} />
+        <View style={styles.rect3}>
+          <MaterialMapView style={styles.materialMapView} />
+        </View>
+        <Center horizontal>
+          <MaterialButtonPrimary text1="Back" style={styles.googlebtn} />
+        </Center>
       </View>
-      <Center horizontal>
-        <MaterialButtonPrimary text1="Back" style={styles.googlebtn} />
-      </Center>
-    </View>
-  );
+    );
+  }
 }
 
 const styles = StyleSheet.create({

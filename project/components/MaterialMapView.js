@@ -2,12 +2,14 @@ import React, {Component} from 'react';
 import {StyleSheet, View} from 'react-native';
 import MapView from 'react-native-maps';
 
-function MaterialMapView(props) {
-  return (
-    <View style={[styles.container, props.style]}>
-      <MapView customMapStyle={'undefined'} style={styles.mapView1} />
-    </View>
-  );
+class MaterialMapView extends Component {
+  render() {
+    return (
+      <View style={[styles.container, this.props.style]}>
+        <MapView customMapStyle={'undefined'} style={styles.mapView1} />
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
