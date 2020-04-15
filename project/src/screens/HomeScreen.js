@@ -1,23 +1,19 @@
 import React from 'react';
 import {createAppContainer} from 'react-navigation';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
-import WelcomePage from './screens/WelcomePage';
-import MapScreen from './screens/MapScreen';
-import ProfileScreen from './screens/ProfileScreen';
-import MoviesScreen from './screens/MoviesScreen';
+import MapScreen from './MapScreen';
+import ProfileScreen from './ProfileScreen';
+import MoviesScreen from './MoviesScreen';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
-console.log(process.env.REACT_APP_GOOGLE_API_KEY)
 
 const AppNavigator = createBottomTabNavigator(
   {
-    Welcome: WelcomePage,
     Map: MapScreen,
     Movies: MoviesScreen,
     Profile: ProfileScreen,
   },
   {
-    initialRouteName: 'Welcome',
+    initialRouteName: 'Map',
     defaultNavigationOptions: ({navigation}) => ({
       tabBarIcon: ({focused, horizontal, tintColor}) => {
         const {routeName} = navigation.state;
@@ -43,7 +39,7 @@ const AppNavigator = createBottomTabNavigator(
 
 const AppContainer = createAppContainer(AppNavigator);
 
-export default class FilmTourist extends React.Component {
+export default class HomeScreen extends React.Component {
   render() {
     return <AppContainer />;
   }

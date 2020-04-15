@@ -12,17 +12,18 @@ import FormTextInput from '../components/FormTextInput';
 import imageLogo from '../assets/images/logo.png';
 import colors from '../config/colors';
 import strings from '../config/strings';
+import {auth} from '../config/firebase';
 import constants from '../config/constants';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 interface State {
   email: string;
   password: string;
   emailTouched: boolean;
   passwordTouched: boolean;
+  errorMessage: null;
 }
 
-class MoviesScreen extends React.Component<{}, State> {
+class LoginScreen extends React.Component<{}, State> {
   passwordInputRef = React.createRef();
 
   state: State = {
@@ -30,14 +31,6 @@ class MoviesScreen extends React.Component<{}, State> {
     password: '',
     emailTouched: false,
     passwordTouched: false,
-  };
-
-  handleEmailChange = (email: string) => {
-    this.setState({email: email});
-  };
-
-  handlePasswordChange = (password: string) => {
-    this.setState({password: password});
   };
 
   handleEmailSubmitPress = () => {
@@ -54,10 +47,14 @@ class MoviesScreen extends React.Component<{}, State> {
     this.setState({passwordTouched: true});
   };
 
-  handleLoginPress = () => {
-    console.log('Login button pressed');
+  handleLogin = () => {
+    auth
+      .signInWithEmailAndPassword(this.email, this.password)
+      .then(() => this.props.navigation.navigate('Home'))
+      .catch(error => this.setState({errorMessage: error.message}));
   };
 
+  //modiefied from https://github.com/mmazzarolo/the-starter-app/
   render() {
     const {email, password, emailTouched, passwordTouched} = this.state;
     const emailError =
@@ -71,10 +68,11 @@ class MoviesScreen extends React.Component<{}, State> {
         behavior={constants.IS_IOS ? 'padding' : undefined}>
         <Image source={imageLogo} style={styles.logo} />
         <View style={styles.form}>
+          <Text style={{color: 'red'}}>{this.state.errorMessage}</Text>
           <FormTextInput
             iconName="account"
             value={this.state.email}
-            onChangeText={this.handleEmailChange}
+            onChangeText={email => this.setState({email})}
             onSubmitEditing={this.handleEmailSubmitPress}
             placeholder={strings.EMAIL_PLACEHOLDER}
             autoCorrect={false}
@@ -88,7 +86,7 @@ class MoviesScreen extends React.Component<{}, State> {
             iconName="lock"
             ref={this.passwordInputRef}
             value={this.state.password}
-            onChangeText={this.handlePasswordChange}
+            onChangeText={password => this.setState({password})}
             placeholder={strings.PASSWORD_PLACEHOLDER}
             secureTextEntry={true}
             returnKeyType="done"
@@ -97,16 +95,28 @@ class MoviesScreen extends React.Component<{}, State> {
           />
           <Button1
             label={strings.LOGIN}
-            onPress={this.handleLoginPress}
+            onPress={this.handleLogin}
             disabled={!email || !password}
           />
 
           <Button1
-              iconName="google"
-              label={strings.GOOGLE_LOGIN}
-              onPress={this.handleLoginPress}
-              style={{backgroundColor: colors.LIGHT_GRAY}}
+            iconName="google"
+            label={strings.GOOGLE_LOGIN}
+            onPress={this.handleLogin}
+            style={{backgroundColor: colors.LIGHT_GRAY}}
           />
+          <View>
+            <Text>
+              {' '}
+              Don't have an account?{' '}
+              <Text
+                onPress={() => this.props.navigation.navigate('SignUp')}
+                style={{color: '#e93766', fontSize: 18}}>
+                {' '}
+                Sign Up{' '}
+              </Text>
+            </Text>
+          </View>
         </View>
       </KeyboardAvoidingView>
     );
@@ -133,4 +143,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MoviesScreen;
+export default LoginScreen;
