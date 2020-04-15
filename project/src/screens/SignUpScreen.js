@@ -20,7 +20,7 @@ export default class SignUpScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={{color: '#e93766', fontSize: 40}}>Sign Up</Text>
+        <Text style={{color: '#26404a', fontSize: 40}}>Sign Up</Text>
         {this.state.errorMessage && (
           <Text style={{color: 'red'}}>{this.state.errorMessage}</Text>
         )}
@@ -46,7 +46,7 @@ export default class SignUpScreen extends Component {
             Already have an account?{' '}
             <Text
               onPress={() => this.props.navigation.navigate('Login')}
-              style={{color: '#e93766', fontSize: 18}}>
+              style={{color: '#26404a', fontSize: 18}}>
               {' '}
               Login{' '}
             </Text>

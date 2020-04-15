@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import {View, Text, ActivityIndicator, StyleSheet} from 'react-native';
+import {View, Text, ActivityIndicator, StyleSheet, Image} from 'react-native';
 import {auth} from '../config/firebase';
+import imageLogo from '../assets/images/logo.png';
 
 class LoadingScreen extends Component {
   componentDidMount() {
@@ -12,8 +13,8 @@ class LoadingScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={{color: '#e93766', fontSize: 40}}>Loading</Text>
-        <ActivityIndicator color="#e93766" size="large" />
+        <Image source={imageLogo} style={styles.logo} />
+        <ActivityIndicator color="#55a6e9" size="large" />
       </View>
     );
   }
@@ -23,6 +24,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  logo: {
+    flex: 1,
+    width: '100%',
+    resizeMode: 'contain',
+    alignSelf: 'center',
   },
 });
 export default LoadingScreen;

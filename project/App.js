@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
-import {createAppContainer} from 'react-navigation';
-import {createBottomTabNavigator} from 'react-navigation-tabs';
+import {createAppContainer, createSwitchNavigator} from 'react-navigation';
 import LoadingScreen from './src/screens/LoadingScreen';
 import SignUpScreen from './src/screens/SignUpScreen';
 import LoginScreen from './src/screens/LoginScreen';
 import HomeScreen from './src/screens/HomeScreen';
 
-const AppNavigator = createBottomTabNavigator(
+const AppNavigator = createSwitchNavigator(
   {
     Loading: LoadingScreen,
     SignUp: SignUpScreen,
