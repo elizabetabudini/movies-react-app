@@ -17,7 +17,7 @@ import {
   TextInputProps,
   View,
 } from 'react-native';
-import colors from '../config/colors';
+import colors from '../app/config/colors';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 type Props = TextInputProps & {

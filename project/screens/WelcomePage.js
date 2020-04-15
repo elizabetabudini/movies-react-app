@@ -9,10 +9,10 @@ import {
 } from 'react-native';
 import Button1 from '../components/Button1';
 import FormTextInput from '../components/FormTextInput';
-import imageLogo from '../assets/images/logo.png';
-import colors from '../config/colors';
-import strings from '../config/strings';
-import constants from '../config/constants';
+import imageLogo from '../app/assets/images/logo.png';
+import colors from '../app/config/colors';
+import strings from '../app/config/strings';
+import constants from '../app/config/constants';
 
 interface State {
   email: string;
