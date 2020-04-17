@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-class ProfileScreen extends React.Component {
+class Profile extends React.Component {
   render() {
     const facebook_button = (
       <Icon.Button
@@ -71,4 +71,4 @@ const styles = StyleSheet.create({
     padding: 20,
   },
 });
-export default ProfileScreen;
+export default Profile;

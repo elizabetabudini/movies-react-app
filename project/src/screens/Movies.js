@@ -1,8 +1,19 @@
 import React from 'react';
 import {StyleSheet, Platform, Image, Text, View} from 'react-native';
 import {auth} from '../config/firebase';
+import Button1 from '../components/Button1';
 
-export default class MoviesScreen extends React.Component {
+export default class Movies extends React.Component {
+  static navigationOptions = {
+    headerTitle: 'Movies',
+    headerLeft: () => (
+      <Button1
+        onPress={() => alert('This is a button!')}
+        title="Info"
+        color="#fff"
+      />
+    ),
+  };
   state = {currentUser: null};
 
   componentDidMount() {

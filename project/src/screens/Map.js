@@ -3,7 +3,7 @@ import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import MaterialMapView from '../components/MaterialMapView';
 import {Center} from '@builderx/utils';
 
-class MapScreen extends Component {
+class Map extends Component {
   render() {
     return (
       <View style={styles.container}>
@@ -49,4 +49,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MapScreen;
+export default Map;

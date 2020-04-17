@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {auth} from '../config/firebase';
-export default class SignUpScreen extends Component {
+export default class SignUp extends Component {
   state = {email: '', password: '', errorMessage: null};
   handleSignUp = () => {
     auth

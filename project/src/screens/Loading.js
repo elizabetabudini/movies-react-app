@@ -3,10 +3,10 @@ import {View, Text, ActivityIndicator, StyleSheet, Image} from 'react-native';
 import {auth} from '../config/firebase';
 import imageLogo from '../assets/images/logo.png';
 
-class LoadingScreen extends Component {
+class Loading extends Component {
   componentDidMount() {
     auth.onAuthStateChanged(user => {
-      this.props.navigation.navigate(user ? 'Home' : 'SignUp');
+      this.props.navigation.navigate(user ? 'Home' : 'Login');
     });
   }
 
@@ -32,4 +32,4 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
 });
-export default LoadingScreen;
+export default Loading;

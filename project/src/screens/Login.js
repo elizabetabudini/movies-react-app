@@ -23,7 +23,7 @@ interface State {
   errorMessage: null;
 }
 
-class LoginScreen extends React.Component<{}, State> {
+class Login extends React.Component<{}, State> {
   passwordInputRef = React.createRef();
 
   state: State = {
@@ -48,9 +48,10 @@ class LoginScreen extends React.Component<{}, State> {
   };
 
   handleLogin = () => {
+    const {email, password} = this.state;
     auth
-      .signInWithEmailAndPassword(this.email, this.password)
-      .then(() => this.props.navigation.navigate('Home'))
+      .signInWithEmailAndPassword(email, password)
+      .then(() => this.props.navigation.navigate('Main'))
       .catch(error => this.setState({errorMessage: error.message}));
   };
 
@@ -143,4 +144,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default Login;

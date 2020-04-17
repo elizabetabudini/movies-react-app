@@ -1,16 +1,16 @@
 import React, {Component} from 'react';
 import {createAppContainer, createSwitchNavigator} from 'react-navigation';
-import LoadingScreen from './src/screens/LoadingScreen';
-import SignUpScreen from './src/screens/SignUpScreen';
-import LoginScreen from './src/screens/LoginScreen';
-import HomeScreen from './src/screens/HomeScreen';
+import Loading from './src/screens/Loading';
+import Home from './src/screens/Home';
+import SignUp from './src/screens/SignUp';
+import Login from './src/screens/Login';
 
 const AppNavigator = createSwitchNavigator(
   {
-    Loading: LoadingScreen,
-    SignUp: SignUpScreen,
-    Login: LoginScreen,
-    Home: HomeScreen,
+    Loading: Loading,
+    SignUp: SignUp,
+    Login: Login,
+    Home: Home,
   },
   {
     initialRouteName: 'Loading',
