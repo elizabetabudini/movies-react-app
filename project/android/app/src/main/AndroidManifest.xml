@@ -3,7 +3,13 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+
+    <permission      android:name="com.shop.shoppinglist.permission.MAPS_RECEIVE"
+                     android:protectionLevel="signature"/>
+    <uses-permission android:name="com.shop.addtask.permission.MAPS_RECEIVE"/>
+    <uses-permission
+            android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
 
     <application
       android:name=".MainApplication"
@@ -27,7 +33,10 @@
 
         <meta-data
                 android:name="com.google.android.geo.API_KEY"
-                android:value=""/>
+                android:value="AIzaSyAM1K099tIzsnsoFPqMEd80QI9BvK-uBTA"/>
+
+        <!-- You will also only need to add this uses-library tag -->
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
     </application>
 
 </manifest>

@@ -17,6 +17,8 @@ import {Button} from 'react-native-elements';
 import {auth} from '../config/firebase';
 import Login from './Login';
 
+
+
 const Bottom = createBottomTabNavigator(
   {
     Map: Map,

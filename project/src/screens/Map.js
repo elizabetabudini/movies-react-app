@@ -1,19 +1,30 @@
 import React, {Component} from 'react';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import MaterialMapView from '../components/MaterialMapView';
-import {Center} from '@builderx/utils';
+import {
+  Dimensions,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+
+var width = Dimensions.get('window').width; //full width
+var height = Dimensions.get('window').height; //full height
 
 class Map extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.rect2} />
-        <View style={styles.rect3}>
-          <MaterialMapView style={styles.materialMapView} />
-        </View>
-        <Center horizontal>
-          <TouchableOpacity text1="Back" style={styles.googlebtn} />
-        </Center>
+        <MapView
+          provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+          style={styles.map}
+          region={{
+            latitude: 37.78825,
+            longitude: -122.4324,
+            latitudeDelta: 0.015,
+            longitudeDelta: 0.0121,
+          }}
+        />
       </View>
     );
   }
@@ -22,30 +33,15 @@ class Map extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'rgba(38,64,74,1)',
+    height: 400,
+    width: 400,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
   },
-  rect2: {
+  map: {
     flex: 1,
-    backgroundColor: 'rgba(38,64,74,1)',
-    alignSelf: 'stretch',
-  },
-  rect3: {
-    top: 176,
-    left: 30,
-    height: 315,
-    backgroundColor: 'rgba(255,255,255,1)',
-    position: 'absolute',
-    right: 30,
-  },
-  materialMapView: {
-    width: 300,
-    height: 315,
-  },
-  googlebtn: {
-    top: 544,
-    width: 249,
-    height: 37,
-    position: 'absolute',
+    height: height,
+    width: width,
   },
 });
 

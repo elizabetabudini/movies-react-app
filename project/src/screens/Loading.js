@@ -3,6 +3,13 @@ import {View, Text, ActivityIndicator, StyleSheet, Image} from 'react-native';
 import {auth} from '../config/firebase';
 import imageLogo from '../assets/images/logo.png';
 
+/**
+ *  Loading.js checks if the user is authenticated
+ *  If user is logged in -> navigates to home page
+ *  If is not logged in -> navigates to login page
+ *
+ *  */
+
 class Loading extends Component {
   componentDidMount() {
     auth.onAuthStateChanged(user => {

@@ -17,7 +17,7 @@
     "react-native": "0.62.1",
     "react-native-elements": "^1.2.7",
     "react-native-gesture-handler": "^1.6.1",
-    "react-native-maps": "^0.27.1",
+    "react-native-maps": "0.27.1",
     "react-native-reanimated": "^1.8.0",
     "react-native-safe-area-context": "^0.7.3",
     "react-native-screens": "^2.4.0",
@@ -28,6 +28,7 @@
   "devDependencies": {
     "@babel/core": "7.9.0",
     "@babel/runtime": "7.9.2",
+    "@react-native-community/async-storage": "^1.10.0",
     "@react-native-community/eslint-config": "0.0.5",
     "babel-jest": "24.9.0",
     "eslint": "6.8.0",
@@ -36,7 +37,8 @@
     "react-native-vector-icons": "^6.6.0",
     "react-navigation-stack": "^2.3.11",
     "react-navigation-tabs": "^2.8.11",
-    "react-test-renderer": "16.11.0"
+    "react-test-renderer": "16.11.0",
+    "reactotron-react-native": "^5.0.0"
   },
   "jest": {
     "preset": "react-native"
