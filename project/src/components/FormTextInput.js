@@ -3,7 +3,7 @@
  * and the behaviour of the keyboard in both Android and IOS platforms.
  * It prevents the keyboard from hiding the input fields in the screen.
  *
- * Author: Elizabeta Budini
+ * Author: Elizabeta Budini adapted from https://mmazzarolo.com/blog/2018-10-08-styling-the-react-native-textinput-on-android/
  * Date: 12/04/2020
  */
 import * as React from 'react';
