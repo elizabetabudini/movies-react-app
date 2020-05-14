@@ -27,8 +27,12 @@
     "react-native-safe-area-context": "^0.7.3",
     "react-native-screens": "^2.4.0",
     "react-native-svg": "^12.1.0",
+    "react-native-webview": "^9.4.0",
     "react-navigation": "^4.3.7",
-    "react-navigation-drawer": "^2.4.11"
+    "react-navigation-drawer": "^2.4.11",
+    "search-insights": "^1.4.0",
+    "express": "latest",
+    "cors": "latest"
   },
   "devDependencies": {
     "@google-cloud/firestore": "^3.8.0",

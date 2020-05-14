@@ -1,5 +1,5 @@
 import React from 'react';
-import {createAppContainer} from 'react-navigation';
+import {createAppContainer, createSwitchNavigator} from 'react-navigation';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {
   createDrawerNavigator,
@@ -9,20 +9,30 @@ import {createStackNavigator} from 'react-navigation-stack';
 
 import Map from './Map';
 import Profile from './Profile';
-import Movies from './Movies';
+import MovieSearch from './MovieSearch';
+import MovieCard from './MovieCard';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {SafeAreaView, ScrollView, Text, View} from 'react-native';
 import Settings from './Settings';
 import {Button} from 'react-native-elements';
 import {auth} from '../config/firebase';
 import Login from './Login';
+import Loading from './Loading';
+import SignUp from './SignUp';
 
-
-
+const nav = createSwitchNavigator(
+  {
+    MovieSearch: MovieSearch,
+    MovieCard: MovieCard,
+  },
+  {
+    initialRouteName: 'MovieSearch',
+  },
+);
 const Bottom = createBottomTabNavigator(
   {
     Map: Map,
-    Movies: Movies,
+    Movies: nav,
     Profile: Profile,
   },
   {
@@ -39,7 +49,6 @@ const Bottom = createBottomTabNavigator(
           iconName = 'library-movie';
         }
         let IconComp = Icon;
-        // You can return any component that you like here!
         return <IconComp name={iconName} size={25} color={tintColor} />;
       },
     }),
@@ -49,6 +58,7 @@ const Bottom = createBottomTabNavigator(
 const HamburgerNavigation = createDrawerNavigator(
   {
     Tabs: Bottom,
+    // menu items
   },
   {
     initialRouteName: 'Tabs',
@@ -100,7 +110,7 @@ export default class Home extends React.Component {
 /*const AppNavigator = createBottomTabNavigator(
   {
     Map: Map,
-    Movies: Movies,
+    MovieSearch: MovieSearch,
     Profile: Profile,
   },
   {
@@ -113,7 +123,7 @@ export default class Home extends React.Component {
           iconName = 'map';
         } else if (routeName === 'Profile') {
           iconName = 'account-circle';
-        } else if (routeName === 'Movies') {
+        } else if (routeName === 'MovieSearch') {
           iconName = 'library-movie';
         }
         let IconComp = Icon;

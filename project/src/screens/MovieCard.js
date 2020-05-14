@@ -7,12 +7,25 @@ import {
   View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import {WebView} from 'react-native-webview';
+import firebase from '../config/firebase';
 
-class Profile extends React.Component {
-  static navigationOptions = {
-    headerTitle: 'Profile',
-  };
+class MovieCard extends React.Component {
+  getMovieDetails(movieID) {
+    var token = 'de22ca05-8965-497b-b36e-9bf49c579aa2';
+    var url =
+      'https://www.myapifilms.com/imdb/idIMDB?idIMDB=' +
+      movieID +
+      '&token=de22ca05-8965-497b-b36e-9bf49c579aa2&format=json&location=2';
+
+    //get data from myfilm api
+    fetch(url)
+      .then(response => response.json())
+      .then(json => {
+        this.setState({movieDetails: json});
+      })
+      .catch(error => console.error(error));
+  }
   render() {
     const facebook_button = (
       <Icon.Button
@@ -23,7 +36,7 @@ class Profile extends React.Component {
           Alert.alert('Facebook Button Clicked');
         }}>
         <Text style={{fontFamily: 'Arial', fontSize: 15, color: '#fff'}}>
-          Login with Facebook
+          Movie Card
         </Text>
       </Icon.Button>
     );
@@ -48,6 +61,10 @@ class Profile extends React.Component {
 
     return (
       <View style={styles.MainContainer}>
+        <WebView
+          source={{uri: 'http://m.imdb.com/title/tt4158110/videogallery'}}
+          style={{marginTop: 20}}
+        />
         <TouchableOpacity>{facebook_button}</TouchableOpacity>
 
         <TouchableOpacity style={{marginTop: 10}}>
@@ -61,16 +78,6 @@ class Profile extends React.Component {
         <TouchableOpacity style={{marginTop: 10}}>
           {music_icon}
         </TouchableOpacity>
-
-        <MapView
-          style={styles.map}
-          region={{
-            latitude: 37.78825,
-            longitude: -122.4324,
-            latitudeDelta: 0.015,
-            longitudeDelta: 0.0121,
-          }}
-        />
       </View>
     );
   }
@@ -85,39 +92,4 @@ const styles = StyleSheet.create({
     padding: 20,
   },
 });
-export default Profile;
-
-/*
-static navigationOptions = {
-    headerTitle: 'MovieSearch',
-  };
-  state = {currentUser: null};
-
-  componentDidMount() {
-    const {currentUser} = auth;
-    this.setState({currentUser});
-  }
-
-  render() {
-    const {currentUser} = this.state;
-    return (
-      <View style={styles.container}>
-        <Text style={{fontSize: 20}}>
-          {' '}
-          Hi
-          <Text style={{color: '#e93766', fontSize: 20}}>
-            {currentUser && currentUser.email}!
-          </Text>
-        </Text>
-      </View>
-    );
-  }
-}
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
- */
+export default MovieCard;

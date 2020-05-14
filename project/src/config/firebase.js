@@ -1,17 +1,5 @@
-import * as firebase from 'firebase';
 import algoliasearch from 'algoliasearch';
-//var admin = require('firebase-admin');
-//const functions = require('firebase-functions');
-
-//var serviceAccount = require('../serviceAccountKey.json');
-
-/*
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: 'https://filmproject-87d6c.firebaseio.com',
-});*/
-
-
+import * as firebase from 'firebase';
 let config = {
   apiKey: 'AIzaSyDH675NFfG5rUHEECwfVgzxN79yW4TxdYs',
   authDomain: 'filmproject-87d6c.firebaseapp.com',
@@ -24,9 +12,6 @@ let config = {
 export default (!firebase.apps.length
   ? firebase.initializeApp(config)
   : firebase.app());
-
-
-
 
 export const database = firebase.database();
 export const auth = firebase.auth();

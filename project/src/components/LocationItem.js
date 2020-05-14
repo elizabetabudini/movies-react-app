@@ -11,7 +11,7 @@ import colors from '../config/colors';
 import Icon from 'react-native-vector-icons/FontAwesome';
 var width = Dimensions.get('window').width; //full width
 
-class ListItem extends React.Component<Props> {
+class LocationItem extends React.Component<Props> {
   render() {
     const {iconName, item} = this.props;
 
@@ -20,19 +20,8 @@ class ListItem extends React.Component<Props> {
     return (
       <View style={styles.view}>
         <TouchableOpacity style={styles.containerStyle}>
-          <Image
-            style={styles.imageStyle}
-            source={{
-              uri: item.urlPoster,
-            }}
-          />
           <View style={styles.desc}>
-            <Text style={styles.text}>
-              {item.title} ({item.year})
-            </Text>
-            <Text style={styles.little}>
-              Director: {item.directors[0].name}
-            </Text>
+            <Text style={styles.text}>{item.location}</Text>
           </View>
           <TouchableOpacity style={{alignItems: 'flex-end'}}>
             <Icon name={iconName} style={styles.iconStyle2} />
@@ -55,11 +44,11 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     width: '100%',
     padding: 5,
-    borderTopColor: colors.APP_BLUE,
+    borderTopColor: colors.WHITE,
     borderTopWidth: StyleSheet.hairlineWidth,
   },
   iconStyle: {
-    color: colors.APP_BLUE,
+    color: colors.WHITE,
     fontFamily: 'Roboto',
     fontSize: 24,
     paddingLeft: 8,
@@ -74,7 +63,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   iconStyle2: {
-    color: colors.APP_BLUE,
+    color: colors.WHITE,
     fontFamily: 'Roboto',
     fontSize: 22,
     margin: 10,
@@ -91,10 +80,10 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     fontFamily: 'Roboto',
     fontSize: 16,
-    color: colors.APP_BLUE,
+    color: colors.WHITE,
     textAlign: 'left',
     height: 25,
   },
 });
 
-export default ListItem;
+export default LocationItem;
