@@ -16,13 +16,17 @@ import {SafeAreaView, ScrollView, Text, View} from 'react-native';
 import Settings from './Settings';
 import {Button} from 'react-native-elements';
 import {auth} from '../config/firebase';
-import Login from './Login';
 import Loading from './Loading';
-import SignUp from './SignUp';
+import colors from '../config/colors';
 
-const nav = createSwitchNavigator(
+const nav = createStackNavigator(
   {
-    MovieSearch: MovieSearch,
+    MovieSearch: {
+      screen: MovieSearch,
+      navigationOptions: {
+        headerShown: false,
+      },
+    },
     MovieCard: MovieCard,
   },
   {
@@ -48,8 +52,7 @@ const Bottom = createBottomTabNavigator(
         } else if (routeName === 'Movies') {
           iconName = 'library-movie';
         }
-        let IconComp = Icon;
-        return <IconComp name={iconName} size={25} color={tintColor} />;
+        return <Icon name={iconName} size={25} color={tintColor} />;
       },
     }),
   },
@@ -67,13 +70,13 @@ const HamburgerNavigation = createDrawerNavigator(
         <ScrollView>
           <SafeAreaView forceInset={{top: 'always', horizontal: 'never'}}>
             <DrawerNavigatorItems {...props} />
-            <Text
+            <Button
+              title="Settings"
               onPress={() => {
                 props.navigation.navigate('Settings');
                 props.navigation.closeDrawer();
-              }}>
-              Settings
-            </Text>
+              }}
+            />
             <Button
               title="Logout"
               onPress={async () => {
@@ -92,11 +95,18 @@ const HamburgerNavigation = createDrawerNavigator(
   },
 );
 const Stack = createStackNavigator({
-  Drawer: {
+  FilmTourist: {
     screen: HamburgerNavigation,
+    navigationOptions: {
+      headerShown: true,
+      title: 'Film Tourist',
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: colors.APP_BLUE,
+      },
+    },
   },
   Settings: Settings,
-  Login: Login,
 });
 
 const AppContainer = createAppContainer(Stack);
@@ -106,42 +116,3 @@ export default class Home extends React.Component {
     return <AppContainer />;
   }
 }
-
-/*const AppNavigator = createBottomTabNavigator(
-  {
-    Map: Map,
-    MovieSearch: MovieSearch,
-    Profile: Profile,
-  },
-  {
-    initialRouteName: 'Map',
-    defaultNavigationOptions: ({navigation}) => ({
-      tabBarIcon: ({focused, horizontal, tintColor}) => {
-        const {routeName} = navigation.state;
-        let iconName;
-        if (routeName === 'Map') {
-          iconName = 'map';
-        } else if (routeName === 'Profile') {
-          iconName = 'account-circle';
-        } else if (routeName === 'MovieSearch') {
-          iconName = 'library-movie';
-        }
-        let IconComp = Icon;
-        // You can return any component that you like here!
-        return <IconComp name={iconName} size={25} color={tintColor} />;
-      },
-    }),
-    tabBarOptions: {
-      activeTintColor: 'tomato',
-      inactiveTintColor: 'gray',
-    },
-  },
-);
-
-const AppContainer = createAppContainer(AppNavigator);
-
-export default class HomeScreen extends React.Component {
-  render() {
-    return <AppContainer />;
-  }
-}*/

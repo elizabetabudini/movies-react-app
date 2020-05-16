@@ -5,9 +5,9 @@ import {
   FlatList,
   StyleSheet,
   TextInput,
-  TouchableOpacity,
   View,
 } from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import PropTypes from 'prop-types';
 import {InstantSearch} from 'react-instantsearch/native';
 import {
@@ -17,16 +17,19 @@ import {
 import ListItem from '../components/ListItem';
 import {client} from '../config/firebase';
 import colors from '../config/colors';
-import Icon from 'react-native-vector-icons/Fontisto';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 var width = Dimensions.get('window').width; //full width
 
 export default class MovieSearch extends React.Component {
-  static navigationOptions = () => {
-    return {
-      headerLeft: <Icon name={'home'} style={styles.iconStyle2} />,
-    };
-  };
+  constructor() {
+    super();
+    this.handleClick = this.handleClick.bind(this);
+  }
+  handleClick(item) {
+    this.props.navigation.navigate('MovieCard', {movie: item});
+  }
+
   //Adapted from https://blog.expo.io/using-algolia-to-implement-search-within-an-expo-firebase-project-da66e3aa8239
   /*
   InstantSearch is a Algolia Componenet to search in a Firebase database which doesn't have indexing
@@ -38,8 +41,7 @@ export default class MovieSearch extends React.Component {
           <View style={styles.searchContainer}>
             <ConnectedSearchBar />
           </View>
-
-          <ConnectedHits />
+          <ConnectedHits navigation={this.props.navigation} />
         </InstantSearch>
       </View>
     );
@@ -79,37 +81,47 @@ SearchBar.propTypes = {
   currentRefinement: PropTypes.string,
 };
 const ConnectedSearchBar = connectSearchBox(SearchBar);
-class Hits extends Component {
-  render() {
-    return this.props.hits.length > 0 ? (
+
+const ConnectedHits = connectInfiniteHits(
+  ({hits, hasMore, refine, navigation}) => {
+    const onEndReached = function() {
+      if (hasMore) {
+        refine();
+      }
+    };
+
+    return hits.length > 0 ? (
       <FlatList
-        data={this.props.hits}
+        data={hits}
+        onEndReached={onEndReached}
         keyExtractor={item => item.objectID}
         initialNumToRender={20}
         renderItem={({item}) => (
-          <TouchableOpacity
-            onClick={() => {
-              Alert.alert('clickedObjectIDs', {
-                index: 'INDEX_NAME',
-                eventName: 'See details',
-                objectIDs: [item.objectID],
-              });
-            }}>
-            <ListItem item={item} iconName={'heart-o'} />
-          </TouchableOpacity>
+          <View style={styles.row}>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('MovieCard', {movieID: item.idIMDB})
+              }>
+              <ListItem item={item} iconName={'heart-o'} />
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Icon name={'heart-o'} style={styles.iconStyle} />
+            </TouchableOpacity>
+          </View>
         )}
       />
     ) : null;
-  }
-}
-
-Hits.propTypes = {
-  hits: PropTypes.array.isRequired, //the records that match the search state
-  refine: PropTypes.func.isRequired, //the function to call when the end of the page is reached to load more results.
-  hasMore: PropTypes.bool.isRequired, //a boolean that indicates if there are more pages to load
-};
-const ConnectedHits = connectInfiniteHits(Hits);
+  },
+);
 const styles = StyleSheet.create({
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center', //vertically centered
+    alignSelf: 'stretch',
+    width: '90%',
+    padding: 5,
+
+  },
   view: {
     width: '100%',
   },
@@ -129,6 +141,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'column',
     backgroundColor: colors.beige,
+
   },
   searchContainer: {
     width: width,

@@ -13,7 +13,7 @@ var width = Dimensions.get('window').width; //full width
 
 class ListItem extends React.Component<Props> {
   render() {
-    const {iconName, item} = this.props;
+    const {item} = this.props;
 
     //if the movie is saved in user favorite list,
     //we add a heart icon to the list item
@@ -34,9 +34,6 @@ class ListItem extends React.Component<Props> {
               Director: {item.directors[0].name}
             </Text>
           </View>
-          <TouchableOpacity style={{alignItems: 'flex-end'}}>
-            <Icon name={iconName} style={styles.iconStyle2} />
-          </TouchableOpacity>
         </TouchableOpacity>
       </View>
     );
@@ -55,8 +52,7 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     width: '100%',
     padding: 5,
-    borderTopColor: colors.APP_BLUE,
-    borderTopWidth: StyleSheet.hairlineWidth,
+
   },
   iconStyle: {
     color: colors.APP_BLUE,

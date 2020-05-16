@@ -3,7 +3,6 @@ import {
   StyleSheet,
   AlertStatic as Alert,
   Text,
-  TouchableOpacity,
   ActivityIndicator,
   View,
   Image,
@@ -11,6 +10,7 @@ import {
   ScrollView,
   FlatList,
 } from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {WebView} from 'react-native-webview';
 import firebase from '../config/firebase';
@@ -29,9 +29,9 @@ class Settings extends React.Component {
     };
   }
   componentDidMount() {
-    //const {movie} = this.props.route.params;
+    const {movie} = this.props.navigation.state.params.movie;
     // used the movie title that's passed in to search for it's details
-    this.getMovieDetails('tt0000335');
+    this.getMovieDetails(movie.idIMDB);
   }
 
   getMovieDetails(movieID) {
@@ -56,35 +56,61 @@ class Settings extends React.Component {
   }
 
   render() {
+    const {navigation} = this.props;
     const {isLoading, movieDetails} = this.state;
     return isLoading ? (
       <ActivityIndicator />
     ) : (
-      <View style={styles.container}>
-        <WebView
-          source={{uri: this.state.movieDetails.videoURL}}
-          style={{marginTop: 10}}
-        />
-        <Image
-          style={styles.imageStyle}
-          source={{
-            uri: this.state.movieDetails.urlPoster,
-          }}
-        />
-        <Text style={styles.textStyle}>{movieDetails.title}</Text>
-        <Text style={styles.textStyle}>{movieDetails.year}</Text>
-        <Text style={styles.textStyle}>{movieDetails.videoURL}</Text>
+      <SafeAreaView style={styles.container}>
         <FlatList
           data={this.state.locationList}
           keyExtractor={item => item.location}
           initialNumToRender={20}
           renderItem={({item}) => (
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={
+                () =>
+                  //console.log('pressed', item.location).bind()
+                  navigation.navigate('Map', {
+                    location: this.state.movieDetails.filmingLocations[0]
+                      .location,
+                  })
+                //navigation.navigate('Map', {location: item.location})
+              }>
               <LocationItem item={item} iconName={'heart-o'} />
             </TouchableOpacity>
           )}
+          ListHeaderComponent={
+            <View>
+              <WebView
+                source={{uri: this.state.movieDetails.videoURL}}
+                style={{marginTop: 10}}
+              />
+              <TouchableOpacity
+                onPress={
+                  () =>
+                    //console.log('pressed', item.location).bind()
+                    navigation.navigate('Map', {
+                      location: this.state.movieDetails.filmingLocations[0]
+                        .location,
+                    })
+                  //navigation.navigate('Map', {location: item.location})
+                }>
+                <Image
+                  style={styles.imageStyle}
+                  source={{
+                    uri: this.state.movieDetails.urlPoster,
+                  }}
+                />
+              </TouchableOpacity>
+              <Text style={styles.textStyle}>{movieDetails.title}</Text>
+              <Text style={styles.textStyle}>{movieDetails.year}</Text>
+              <Text style={styles.textStyle}>{movieDetails.videoURL}</Text>
+              <Text style={styles.textStyle}>{movieDetails.plot}</Text>
+            </View>
+          }
         />
-      </View>
+      </SafeAreaView>
     );
   }
 }
