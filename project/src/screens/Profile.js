@@ -1,110 +1,112 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {
+  Dimensions,
+  FlatList,
   StyleSheet,
-  AlertStatic as Alert,
   Text,
-  TouchableOpacity,
+  TextInput,
   View,
 } from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import {Card} from 'react-native-elements';
+import {ListItem} from 'react-native-elements';
+import {auth} from '../config/firebase';
+import FavouriteItem from '../components/FavouriteItem';
+import AsyncStorage from '@react-native-community/async-storage';
+import {removeItem} from '../storage/storageFunctions';
 
-class Profile extends React.Component {
-  render() {
-    const facebook_button = (
-      <Icon.Button
-        name="facebook"
-        backgroundColor="#3b5998"
-        size={20}
-        onPress={() => {
-          Alert.alert('Facebook Button Clicked');
-        }}>
-        <Text style={{fontFamily: 'Arial', fontSize: 15, color: '#fff'}}>
-          Login with Facebook
-        </Text>
-      </Icon.Button>
-    );
-
-    const twitter_button = (
-      <Icon.Button
-        name="twitter"
-        backgroundColor="#51aaf0"
-        size={20}
-        onPress={() => {
-          Alert.alert('Twitter Button Clicked');
-        }}>
-        <Text style={{fontFamily: 'Arial', fontSize: 15, color: '#fff'}}>
-          Follow Us on Twitter
-        </Text>
-      </Icon.Button>
-    );
-
-    const android_icon = <Icon name="android" size={60} color="#007c00" />;
-
-    const music_icon = <Icon name="music" size={60} color="#fb3742" />;
-
-    return (
-      <View style={styles.MainContainer}>
-        <TouchableOpacity>{facebook_button}</TouchableOpacity>
-
-        <TouchableOpacity style={{marginTop: 10}}>
-          {twitter_button}
-        </TouchableOpacity>
-
-        <TouchableOpacity style={{marginTop: 10}}>
-          {android_icon}
-        </TouchableOpacity>
-
-        <TouchableOpacity style={{marginTop: 10}}>
-          {music_icon}
-        </TouchableOpacity>
-      </View>
-    );
+export default class Profile extends Component {
+  constructor(props) {
+    super(props);
   }
-}
-
-const styles = StyleSheet.create({
-  MainContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-    padding: 20,
-  },
-});
-export default Profile;
-
-/*
-static navigationOptions = {
-    headerTitle: 'MovieSearch',
+  state = {
+    currentUser: null,
+    movieList: [],
+    isLoading: true,
+    locationList: [],
   };
-  state = {currentUser: null};
 
-  componentDidMount() {
+  async componentDidMount() {
     const {currentUser} = auth;
     this.setState({currentUser});
+    await this.getItems('movies');
+    await this.getItems('locations');
   }
 
   render() {
-    const {currentUser} = this.state;
+    const {currentUser, movieList} = this.state;
+    const {navigation} = this.props;
     return (
-      <View style={styles.container}>
-        <Text style={{fontSize: 20}}>
-          {' '}
-          Hi
-          <Text style={{color: '#e93766', fontSize: 20}}>
-            {currentUser && currentUser.email}!
-          </Text>
-        </Text>
+      <View style={{flex: 1, flexDirection: 'column'}}>
+        <ListItem
+          leftAvatar={{
+            title: currentUser && currentUser.email[0],
+            //source: {uri: currentUser && currentUser.photoURL},
+            showAccessory: true,
+          }}
+          title={currentUser && currentUser.email}
+        />
+        <Card title="Saved movies">
+          <FlatList
+            data={movieList}
+            keyExtractor={item => item.idIMDB}
+            initialNumToRender={20}
+            renderItem={({item}) => (
+              <View style={styles.row}>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('MovieCard', {
+                      movieID: item.idIMDB,
+                    })
+                  }>
+                  <FavouriteItem item={item} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    //remove item and re-render
+                    removeItem(item, 'movies').then(this.getItems('movies'));
+                  }}
+                  onLongPress={() => {
+                    //share
+                  }}>
+                  <Icon name={'heart'} style={styles.iconStyle} />
+                </TouchableOpacity>
+              </View>
+            )}
+          />
+        </Card>
+        <Card title="Saved locations">
+          {
+            <View>
+              <Text>Name</Text>
+            </View>
+          }
+        </Card>
       </View>
     );
   }
+
+  async getItems(collectionName) {
+    let items = [];
+    try {
+      const collection = await AsyncStorage.getItem(collectionName);
+      items = JSON.parse(collection);
+      console.log('Returned list:', items);
+    } catch (error) {
+      console.log(error, 'error');
+    } finally {
+      if (collectionName === 'movies') {
+        this.setState({movieList: items});
+      } else {
+        this.setState({locationsList: items});
+      }
+    }
+  }
 }
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+  name: {backgroundColor: 'powderblue', flex: 1},
+  movies: {backgroundColor: 'skyblue', flex: 3},
+  locations: {backgroundColor: 'steelblue', flex: 3},
 });
- */

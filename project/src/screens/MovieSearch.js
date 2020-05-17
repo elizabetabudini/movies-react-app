@@ -14,10 +14,12 @@ import {
   connectInfiniteHits,
   connectSearchBox,
 } from 'react-instantsearch/connectors';
-import ListItem from '../components/ListItem';
+import CustomListItem from '../components/CustomListItem';
 import {client} from '../config/firebase';
 import colors from '../config/colors';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {addItem, removeItem, isSaved} from '../storage/storageFunctions';
+import FavouriteIcon from '../components/FavouriteIcon';
 
 var width = Dimensions.get('window').width; //full width
 
@@ -90,6 +92,16 @@ const ConnectedHits = connectInfiniteHits(
       }
     };
 
+    let isMovieSaved;
+    isSaved(item,'movies').then(result => {
+      isMovieSaved = result;
+    });
+    if (isMovieSaved) {
+      var iconName = 'heart';
+    } else {
+      var iconName = 'heart-o';
+    }
+
     return hits.length > 0 ? (
       <FlatList
         data={hits}
@@ -102,11 +114,9 @@ const ConnectedHits = connectInfiniteHits(
               onPress={() =>
                 navigation.navigate('MovieCard', {movieID: item.idIMDB})
               }>
-              <ListItem item={item} iconName={'heart-o'} />
+              <CustomListItem item={item} />
             </TouchableOpacity>
-            <TouchableOpacity>
-              <Icon name={'heart-o'} style={styles.iconStyle} />
-            </TouchableOpacity>
+            <FavouriteIcon name={iconName} item={item} />
           </View>
         )}
       />
@@ -120,7 +130,6 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     width: '90%',
     padding: 5,
-
   },
   view: {
     width: '100%',
@@ -141,7 +150,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'column',
     backgroundColor: colors.beige,
-
   },
   searchContainer: {
     width: width,

@@ -4,14 +4,11 @@ import {
   Text,
   TouchableOpacity,
   Image,
-  Dimensions,
   View,
 } from 'react-native';
 import colors from '../config/colors';
-import Icon from 'react-native-vector-icons/FontAwesome';
-var width = Dimensions.get('window').width; //full width
 
-class ListItem extends React.Component<Props> {
+class FavouriteItem extends React.Component<Props> {
   render() {
     const {item} = this.props;
 
@@ -52,7 +49,6 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     width: '100%',
     padding: 5,
-
   },
   iconStyle: {
     color: colors.APP_BLUE,
@@ -93,4 +89,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ListItem;
+export default FavouriteItem;

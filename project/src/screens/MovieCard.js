@@ -15,7 +15,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {WebView} from 'react-native-webview';
 import firebase from '../config/firebase';
 import colors from '../config/colors';
-import ListItem from '../components/ListItem';
+import CustomListItem from '../components/CustomListItem';
 import LocationItem from '../components/LocationItem';
 
 class MovieCard extends React.Component {
