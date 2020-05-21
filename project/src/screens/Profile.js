@@ -19,8 +19,10 @@ import {removeItem} from '../storage/storageFunctions';
 export default class Profile extends Component {
   constructor(props) {
     super(props);
+    this.getItems = this.getItems.bind(this);
   }
   state = {
+    navListener: null,
     currentUser: null,
     movieList: [],
     isLoading: true,
@@ -32,11 +34,21 @@ export default class Profile extends Component {
     this.setState({currentUser});
     await this.getItems('movies');
     await this.getItems('locations');
+    this.navListener = this.props.navigation.addListener(
+      'didFocus',
+      async payload => {
+        await this.getItems('movies');
+        await this.getItems('locations');
+      },
+    );
   }
 
   render() {
-    const {currentUser, movieList} = this.state;
+    const {currentUser, movieList, locationList} = this.state;
     const {navigation} = this.props;
+    console.log('State movies:', movieList);
+    console.log('State locations:', locationList);
+
     return (
       <View style={{flex: 1, flexDirection: 'column'}}>
         <ListItem
@@ -48,40 +60,48 @@ export default class Profile extends Component {
           title={currentUser && currentUser.email}
         />
         <Card title="Saved movies">
-          <FlatList
-            data={movieList}
-            keyExtractor={item => item.idIMDB}
-            initialNumToRender={20}
-            renderItem={({item}) => (
-              <View style={styles.row}>
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate('MovieCard', {
-                      movieID: item.idIMDB,
-                    })
-                  }>
-                  <FavouriteItem item={item} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    //remove item and re-render
-                    removeItem(item, 'movies').then(this.getItems('movies'));
-                  }}
-                  onLongPress={() => {
-                    //share
-                  }}>
-                  <Icon name={'heart'} style={styles.iconStyle} />
-                </TouchableOpacity>
-              </View>
-            )}
-          />
+          {movieList && movieList.length ? (
+            <FlatList
+              data={movieList}
+              keyExtractor={item => item.idIMDB}
+              initialNumToRender={20}
+              renderItem={({item}) => (
+                <View style={styles.row}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('MovieCard', {
+                        movieID: item.idIMDB,
+                      })
+                    }>
+                    <FavouriteItem item={item} />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      //remove item and force re-render
+                      removeItem(item, 'movies').then(() => {
+                        this.getItems('movies');
+                      });
+                    }}
+                    onLongPress={() => {
+                      //share
+                    }}>
+                    <Icon name={'heart'} style={styles.iconStyle} />
+                  </TouchableOpacity>
+                </View>
+              )}
+            />
+          ) : (
+            <Text> No movies saved </Text>
+          )}
         </Card>
         <Card title="Saved locations">
-          {
+          {locationList && locationList.length ? (
             <View>
               <Text>Name</Text>
             </View>
-          }
+          ) : (
+            <Text> No locations saved </Text>
+          )}
         </Card>
       </View>
     );
@@ -89,10 +109,10 @@ export default class Profile extends Component {
 
   async getItems(collectionName) {
     let items = [];
+    console.log('Getting items from:', collectionName);
     try {
       const collection = await AsyncStorage.getItem(collectionName);
       items = JSON.parse(collection);
-      console.log('Returned list:', items);
     } catch (error) {
       console.log(error, 'error');
     } finally {

@@ -1,16 +1,13 @@
 import * as React from 'react';
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  Image,
-  View,
-} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, Image, View} from 'react-native';
 import colors from '../config/colors';
+import {addItem, removeItem} from '../storage/storageFunctions';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 class FavouriteItem extends React.Component<Props> {
   render() {
-    const {item} = this.props;
+    const {item, iconName} = this.props;
+    var saved = 'heart';
 
     //if the movie is saved in user favorite list,
     //we add a heart icon to the list item
@@ -32,6 +29,23 @@ class FavouriteItem extends React.Component<Props> {
             </Text>
           </View>
         </TouchableOpacity>
+
+        {//if the item is already saved in asynstorage display full heart icon
+        iconName === saved ? (
+          <TouchableOpacity
+            onPress={() => {
+              removeItem(item, 'movies');
+            }}>
+            <Icon name={iconName} style={styles.iconStyle} />
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            onPress={() => {
+              addItem(item, 'movies');
+            }}>
+            <Icon name={iconName} style={styles.iconStyle} />
+          </TouchableOpacity>
+        )}
       </View>
     );
   }

@@ -11,37 +11,36 @@ export default class Map extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      navListener: null,
       mapRegion: null,
       lastLat: null,
       lastLong: null,
+      movieLoc: 'undefined',
     };
   }
-
-  componentDidMount() {
-    let location = 'undefined'
+  updateMap() {
     // if coming from movie details
-    if(this.props.navigation.state.params){
-      location = JSON.stringify(this.props.navigation.state.params.location);
-    }
-
-    if (location !== 'undefined') {
-      console.log('loc: ', location);
+    if (this.props.navigation.state.params) {
+      let loc = JSON.stringify(this.props.navigation.state.params.location);
+      this.setState({
+        movieLoc: loc,
+      });
       //locations are store in db as address, we need to convert the address into lat, long
-      Geocoder.from(location)
+      Geocoder.from(loc)
         .then(json => {
           var location = json.results[0].geometry.location;
           //focus on location given
           let region = {
             latitude: location.lat,
             longitude: location.lng,
-            latitudeDelta: 6.22 * 1.5,
-            longitudeDelta: 2.21 * 1.5,
+            latitudeDelta: 0.622 * 1.5,
+            longitudeDelta: 0.221 * 1.5,
           };
           this.onRegionChange(region, region.latitude, region.longitude);
         })
         .catch(error => console.warn(error));
     } else {
-      console.log('else: ');
+      console.log('focus on user location');
       //otherwise focus on user location
       this.watchID = Geolocation.watchPosition(position => {
         let region = {
@@ -53,6 +52,15 @@ export default class Map extends React.Component {
         this.onRegionChange(region, region.latitude, region.longitude);
       });
     }
+  }
+
+  componentDidMount() {
+    this.navListener = this.props.navigation.addListener(
+      'didFocus',
+      payload => {
+        this.updateMap();
+      },
+    );
   }
 
   //update the state when region changes

@@ -1,7 +1,8 @@
 import AsyncStorage from '@react-native-community/async-storage';
+import {RNToasty} from 'react-native-toasty'
 
 export const isSaved = async (item, collectionName) => {
-
+  return true;
 };
 
 /**
@@ -16,22 +17,44 @@ export const addItem = async (item, collectionName) => {
     //we need to create a new key for the array
     const existingItems = (await AsyncStorage.getItem(collectionName)) || '[]';
     let itemList = JSON.parse(existingItems);
+    console.log('list:', itemList);
+    console.log("item:",JSON.stringify(item));
 
-    //adding the new item to the list
-    itemList.push(item);
+    //if the item does not exist in the storage, indexOf will return -1
+    let index = itemList.indexOf(JSON.stringify(item));
 
-    //creating or updating the list
-    await AsyncStorage.setItem(collectionName, JSON.stringify(itemList))
-      .then(() => {
-        console.log('It was saved successfully in collection:', collectionName);
-      })
-      .catch(() => {
-        console.log(
-          'There was an error saving the item in collection:',
-          collectionName,
-        );
+    //check if item is already been saved in storage
+    if (index === -1) {
+      //adding the new item to the list
+      itemList.push(item);
+
+      //creating or updating the list
+      await AsyncStorage.setItem(collectionName, JSON.stringify(itemList))
+        .then(() => {
+          console.log(
+            'It was saved successfully in collection:',
+            collectionName,
+          );
+          RNToasty.Success({
+            title: 'Great! The item has been saved to your collection',
+          });
+        })
+        .catch(() => {
+          console.log(
+            'There was an error saving the item in collection:',
+            collectionName,
+          );
+        });
+    } else {
+      //item already saved in storage
+      RNToasty.Info({
+        title: 'Check you profile: the item is already in your collection',
       });
+    }
   } catch (error) {
+    RNToasty.Error({
+      title: 'Try again, an error occurred while saving the item',
+    });
     console.log(error);
   }
 };
@@ -53,18 +76,27 @@ export const removeItem = async (item, collectionName) => {
     //updating the collection
     await AsyncStorage.setItem(collectionName, JSON.stringify(itemList))
       .then(() => {
+        RNToasty.Success({
+          title: 'Item successfully removed from your collection',
+        });
         console.log(
           'It was removed successfully from collection:',
           collectionName,
         );
       })
       .catch(() => {
+        RNToasty.Error({
+          title: 'Try again, an error occurred while saving the item',
+        });
         console.log(
           'There was an error removing the item from collection:',
           collectionName,
         );
       });
   } catch (error) {
+    RNToasty.Error({
+      title: 'Try again, an error occurred while saving the item',
+    });
     console.log(error);
   }
 };

@@ -34,8 +34,8 @@ export default class MovieSearch extends React.Component {
 
   //Adapted from https://blog.expo.io/using-algolia-to-implement-search-within-an-expo-firebase-project-da66e3aa8239
   /*
-  InstantSearch is a Algolia Componenet to search in a Firebase database which doesn't have indexing
-   */
+    InstantSearch is a Algolia Componenet to search in a Firebase database which doesn't have indexing
+     */
   render() {
     return (
       <View style={styles.mainContainer}>
@@ -92,16 +92,6 @@ const ConnectedHits = connectInfiniteHits(
       }
     };
 
-    let isMovieSaved;
-    isSaved(item,'movies').then(result => {
-      isMovieSaved = result;
-    });
-    if (isMovieSaved) {
-      var iconName = 'heart';
-    } else {
-      var iconName = 'heart-o';
-    }
-
     return hits.length > 0 ? (
       <FlatList
         data={hits}
@@ -113,10 +103,10 @@ const ConnectedHits = connectInfiniteHits(
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate('MovieCard', {movieID: item.idIMDB})
-              }>
+              }
+              onLongPress={() => addItem(item, 'movies')}>
               <CustomListItem item={item} />
             </TouchableOpacity>
-            <FavouriteIcon name={iconName} item={item} />
           </View>
         )}
       />

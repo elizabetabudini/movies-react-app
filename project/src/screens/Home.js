@@ -1,5 +1,5 @@
 import React from 'react';
-import {createAppContainer, createSwitchNavigator} from 'react-navigation';
+import {createAppContainer} from 'react-navigation';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {
   createDrawerNavigator,
@@ -12,11 +12,10 @@ import Profile from './Profile';
 import MovieSearch from './MovieSearch';
 import MovieCard from './MovieCard';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {SafeAreaView, ScrollView, Text, View} from 'react-native';
+import {SafeAreaView, ScrollView} from 'react-native';
 import Settings from './Settings';
 import {Button} from 'react-native-elements';
 import {auth} from '../config/firebase';
-import Loading from './Loading';
 import colors from '../config/colors';
 
 const nav = createStackNavigator(
@@ -52,7 +51,8 @@ const Bottom = createBottomTabNavigator(
         } else if (routeName === 'Movies') {
           iconName = 'library-movie';
         }
-        return <Icon name={iconName} size={25} color={tintColor} />;
+        return <Icon name={iconName} size={25} color={tintColor} />
+        ;
       },
     }),
   },
