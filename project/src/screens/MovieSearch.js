@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {
-  AlertStatic as Alert,
   Dimensions,
   FlatList,
   StyleSheet,
@@ -18,8 +17,7 @@ import CustomListItem from '../components/CustomListItem';
 import {client} from '../config/firebase';
 import colors from '../config/colors';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {addItem, removeItem, isSaved} from '../storage/storageFunctions';
-import FavouriteIcon from '../components/FavouriteIcon';
+import {addItem} from '../storage/storageFunctions';
 
 var width = Dimensions.get('window').width; //full width
 

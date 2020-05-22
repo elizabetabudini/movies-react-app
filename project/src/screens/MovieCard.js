@@ -1,21 +1,15 @@
 import React from 'react';
 import {
   StyleSheet,
-  AlertStatic as Alert,
   Text,
   ActivityIndicator,
   View,
   Image,
   SafeAreaView,
-  ScrollView,
   FlatList,
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import {WebView} from 'react-native-webview';
-import firebase from '../config/firebase';
 import colors from '../config/colors';
-import CustomListItem from '../components/CustomListItem';
 import LocationItem from '../components/LocationItem';
 
 class MovieCard extends React.Component {
