@@ -4,7 +4,7 @@ import MapView from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import Geocoder from 'react-native-geocoding';
 
-Geolocation.getCurrentPosition(info => console.log(info));
+Geolocation.getCurrentPosition(info => console.log('current position:', info));
 Geocoder.init('AIzaSyBWeYmaWDQotGB_BjI_x69LbE0NDIRJ4ck', {language: 'en'});
 
 export default class Map extends React.Component {
@@ -16,8 +16,62 @@ export default class Map extends React.Component {
       lastLat: null,
       lastLong: null,
       movieLoc: 'undefined',
+      markers: [],
     };
   }
+  async componentDidMount() {
+    this.navListener = this.props.navigation.addListener(
+      'didFocus',
+      payload => {
+        this.updateMap();
+      },
+    );
+    await this.getMarkers();
+  }
+
+  async getMarkers() {
+    var locationList = [];
+    var movieList = [];
+    let movieURL = '';
+
+    movieURL = 'https://filmproject-87d6c.firebaseio.com/.json';
+
+    fetch(movieURL)
+      .then(response => response.json())
+      .then(json => {
+        //get list of movies
+        movieList = json.movies;
+      })
+      .catch(error => console.error(error))
+      .finally(() => {
+        //for each movie get list of locations
+        movieList.forEach(item => {
+          //for each location find coordinates based on address
+          item.filmingLocations.forEach(loc => {
+            //get coords from address using Geocoder
+            Geocoder.from(loc.location)
+              .then(json => {
+                var coords = json.results[0].geometry.location;
+                const location = {
+                  coords: {latitude: coords.lat, longitude: coords.lng},
+                  title: item.title,
+                  poster: item.urlPoster,
+                  year: item.year,
+                  id: item.idIMDB,
+                };
+                locationList.push(location);
+              })
+              .catch(error => console.warn(error))
+              .finally(() =>
+                this.setState({markers: locationList}, function() {
+                  //console.log(this.state.markers);
+                }),
+              );
+          });
+        });
+      });
+  }
+
   updateMap() {
     // if coming from movie details
     if (this.props.navigation.state.params) {
@@ -54,15 +108,6 @@ export default class Map extends React.Component {
     }
   }
 
-  componentDidMount() {
-    this.navListener = this.props.navigation.addListener(
-      'didFocus',
-      payload => {
-        this.updateMap();
-      },
-    );
-  }
-
   //update the state when region changes
   onRegionChange(region, lastLat, lastLong) {
     this.setState({
@@ -81,17 +126,9 @@ export default class Map extends React.Component {
           region={this.state.mapRegion}
           showsUserLocation={true}
           followUserLocation={true}>
-          <MapView.Marker
-            coordinate={{
-              latitude: this.state.lastLat + 0.0005 || -36.82339,
-              longitude: this.state.lastLong + 0.0005 || -73.03569,
-            }}>
-            <View>
-              <Text style={{color: '#000'}}>
-                {this.state.lastLong} / {this.state.lastLat}
-              </Text>
-            </View>
-          </MapView.Marker>
+          {this.state.markers.map(marker => (
+            <MapView.Marker coordinate={marker.coords} title={marker.title} />
+          ))}
         </MapView>
       </View>
     );
