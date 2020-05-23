@@ -2,20 +2,25 @@ import React, {Component} from 'react';
 import {
   Dimensions,
   FlatList,
+  Linking,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
   View,
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import {Card} from 'react-native-elements';
 import {ListItem} from 'react-native-elements';
 import {auth} from '../config/firebase';
 import FavouriteItem from '../components/FavouriteItem';
 import AsyncStorage from '@react-native-community/async-storage';
 import {removeItem} from '../storage/storageFunctions';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import Share from 'react-native-share';
+import colors from '../config/colors';
 
+let facebookParameters = '';
 export default class Profile extends Component {
   constructor(props) {
     super(props);
@@ -26,7 +31,7 @@ export default class Profile extends Component {
     currentUser: null,
     movieList: [],
     isLoading: true,
-    locationList: [],
+    locationsList: [],
   };
 
   async componentDidMount() {
@@ -43,14 +48,25 @@ export default class Profile extends Component {
     );
   }
 
+  share(idIMDB) {
+    var url = 'https://www.imdb.com/title/' + idIMDB + '/';
+    Share.open({url: url})
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        err && console.log(err);
+      });
+  }
+
   render() {
-    const {currentUser, movieList, locationList} = this.state;
+    const {currentUser, movieList, locationsList} = this.state;
     const {navigation} = this.props;
     console.log('State movies:', movieList);
-    console.log('State locations:', locationList);
+    console.log('State locations:', locationsList);
 
     return (
-      <View style={{flex: 1, flexDirection: 'column'}}>
+      <ScrollView style={{flex: 1, flexDirection: 'column'}}>
         <ListItem
           leftAvatar={{
             title: currentUser && currentUser.email[0],
@@ -73,20 +89,23 @@ export default class Profile extends Component {
                         movieID: item.idIMDB,
                       })
                     }>
-                    <FavouriteItem item={item} />
+                    <FavouriteItem item={item} itemType={'movie'} />
                   </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => {
-                      //remove item and force re-render
-                      removeItem(item, 'movies').then(() => {
-                        this.getItems('movies');
-                      });
-                    }}
-                    onLongPress={() => {
-                      //share
-                    }}>
-                    <Icon name={'heart'} style={styles.iconStyle} />
-                  </TouchableOpacity>
+                  <View
+                    style={{flexDirection: 'row', justifyContent: 'center'}}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        //remove item and force re-render
+                        removeItem(item, 'movies').then(() => {
+                          this.getItems('movies');
+                        });
+                      }}>
+                      <Icon name={'heart'} style={styles.iconStyle} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.share(item.idIMDB)}>
+                      <Icon name={'share-alt'} style={styles.iconStyle} />
+                    </TouchableOpacity>
+                  </View>
                 </View>
               )}
             />
@@ -95,21 +114,50 @@ export default class Profile extends Component {
           )}
         </Card>
         <Card title="Saved locations">
-          {locationList && locationList.length ? (
-            <View>
-              <Text>Name</Text>
-            </View>
+          {locationsList && locationsList.length ? (
+            <FlatList
+              data={locationsList}
+              keyExtractor={item => item.location}
+              initialNumToRender={20}
+              renderItem={({item}) => (
+                <View style={styles.row}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('Map', {
+                        location: item.location,
+                      })
+                    }>
+                    <FavouriteItem item={item} itemType={'location'} />
+                  </TouchableOpacity>
+                  <View
+                    style={{flexDirection: 'row', justifyContent: 'center'}}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        //remove item and force re-render
+                        removeItem(item, 'locations').then(() => {
+                          this.getItems('locations');
+                        });
+                      }}>
+                      <Icon name={'heart'} style={styles.iconStyle} />
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                      <Icon name={'share-alt'} style={styles.iconStyle} />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              )}
+            />
           ) : (
             <Text> No locations saved </Text>
           )}
         </Card>
-      </View>
+      </ScrollView>
     );
   }
 
   async getItems(collectionName) {
     let items = [];
-    console.log('Getting items from:', collectionName);
+    console.log('Profile.js -> Getting items from:', collectionName);
     try {
       const collection = await AsyncStorage.getItem(collectionName);
       items = JSON.parse(collection);
@@ -119,6 +167,7 @@ export default class Profile extends Component {
       if (collectionName === 'movies') {
         this.setState({movieList: items});
       } else {
+        console.log('Profile.js -> Locations:', items);
         this.setState({locationsList: items});
       }
     }
@@ -126,7 +175,11 @@ export default class Profile extends Component {
 }
 
 const styles = StyleSheet.create({
-  name: {backgroundColor: 'powderblue', flex: 1},
-  movies: {backgroundColor: 'skyblue', flex: 3},
-  locations: {backgroundColor: 'steelblue', flex: 3},
+  iconStyle: {
+    color: colors.APP_BLUE,
+    fontFamily: 'Roboto',
+    fontSize: 24,
+    paddingLeft: 8,
+    paddingRight: 8,
+  },
 });

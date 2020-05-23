@@ -12,11 +12,18 @@ import Profile from './Profile';
 import MovieSearch from './MovieSearch';
 import MovieCard from './MovieCard';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {SafeAreaView, ScrollView} from 'react-native';
+import {
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import Settings from './Settings';
-import {Button} from 'react-native-elements';
+import {Button, ListItem} from 'react-native-elements';
 import {auth} from '../config/firebase';
 import colors from '../config/colors';
+import {Drawer} from 'react-native-paper';
 
 const nav = createStackNavigator(
   {
@@ -51,8 +58,7 @@ const Bottom = createBottomTabNavigator(
         } else if (routeName === 'Movies') {
           iconName = 'library-movie';
         }
-        return <Icon name={iconName} size={25} color={tintColor} />
-        ;
+        return <Icon name={iconName} size={25} color={tintColor} />;
       },
     }),
   },
@@ -66,19 +72,32 @@ const HamburgerNavigation = createDrawerNavigator(
   {
     initialRouteName: 'Tabs',
     contentComponent: props => {
+      const {currentUser} = auth;
       return (
         <ScrollView>
           <SafeAreaView forceInset={{top: 'always', horizontal: 'never'}}>
             <DrawerNavigatorItems {...props} />
-            <Button
-              title="Settings"
+            <ListItem
+              leftAvatar={{
+                title: currentUser && currentUser.email[0],
+                //source: {uri: currentUser && currentUser.photoURL},
+                showAccessory: true,
+              }}
+              title={currentUser && currentUser.email}
+            />
+            <Drawer.Item
+              style={{backgroundColor: colors.LIGHT_GRAY}}
+              icon="settings"
+              label="Settings"
               onPress={() => {
                 props.navigation.navigate('Settings');
                 props.navigation.closeDrawer();
               }}
             />
-            <Button
-              title="Logout"
+            <Drawer.Item
+              style={{backgroundColor: colors.LIGHT_GRAY}}
+              icon="logout"
+              label="Logout"
               onPress={async () => {
                 try {
                   await auth.signOut(); //
@@ -97,16 +116,42 @@ const HamburgerNavigation = createDrawerNavigator(
 const Stack = createStackNavigator({
   FilmTourist: {
     screen: HamburgerNavigation,
-    navigationOptions: {
-      headerShown: true,
-      title: 'Film Tourist',
-      headerTintColor: 'white',
-      headerStyle: {
-        backgroundColor: colors.APP_BLUE,
-      },
+    navigationOptions: ({navigation}) => {
+      return {
+        headerShown: true,
+        title: 'Film Tourist',
+        headerTintColor: 'white',
+        headerStyle: {
+          backgroundColor: colors.APP_BLUE,
+        },
+        headerLeft: (
+          <TouchableOpacity
+            onPress={() => {
+              navigation.toggleDrawer();
+            }}>
+            <Icon name="menu" style={styles.icon} />
+          </TouchableOpacity>
+        ),
+      };
     },
   },
   Settings: Settings,
+});
+const styles = StyleSheet.create({
+  text: {
+    color: colors.APP_BLUE,
+    fontSize: 20,
+  },
+  options: {
+    marginLeft: 10,
+    borderBottomColor: colors.APP_BLUE,
+  },
+  icon: {
+    color: colors.WHITE,
+    fontFamily: 'Roboto',
+    fontSize: 30,
+    marginLeft: 15,
+  },
 });
 
 const AppContainer = createAppContainer(Stack);

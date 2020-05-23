@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import colors from '../config/colors';
-import LocationItem from '../components/LocationItem';
+import ListLocationItem from '../components/ListLocationItem';
 
 class MovieCard extends React.Component {
   static navigationOptions = {
@@ -65,38 +65,27 @@ class MovieCard extends React.Component {
           keyExtractor={item => item.location}
           initialNumToRender={20}
           renderItem={({item}) => (
-            <TouchableOpacity
-              onPress={
-                () =>
-                  //console.log('pressed', item.location).bind()
-                  navigation.navigate('Map', {
-                    location: this.state.movieDetails.filmingLocations[0]
-                      .location,
-                  })
-                //navigation.navigate('Map', {location: item.location})
-              }>
-              <LocationItem item={item} iconName={'heart-o'} />
-            </TouchableOpacity>
+            <ListLocationItem
+              item={item}
+              movieDetails={movieDetails}
+              iconName={'heart-o'}
+              navigation={navigation}
+            />
           )}
           ListHeaderComponent={
             <View>
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('Map', {
-                    location: this.state.movieDetails.filmingLocations[0]
-                      .location,
-                  })
-                }>
-                <Image
-                  style={styles.imageStyle}
-                  source={{
-                    uri: this.state.movieDetails.urlPoster,
-                  }}
-                />
-              </TouchableOpacity>
-              <Text style={styles.textStyle}>{movieDetails.title}({movieDetails.year})</Text>
-              <Text style={styles.little}>Actors: {movieDetails.actors}</Text>
-              <Text style={styles.textStyle}>{movieDetails.filmingLocations.length} filming locations found:</Text>
+              <Image
+                style={styles.imageStyle}
+                source={{
+                  uri: this.state.movieDetails.urlPoster,
+                }}
+              />
+              <Text style={styles.textStyle}>
+                {movieDetails.title} ({movieDetails.year})
+              </Text>
+              <Text style={styles.textStyle}>
+                {movieDetails.filmingLocations.length} filming locations found:
+              </Text>
             </View>
           }
         />

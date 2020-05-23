@@ -97,8 +97,8 @@ export default class Map extends React.Component {
           let region = {
             latitude: location.lat,
             longitude: location.lng,
-            latitudeDelta: 0.622 * 1.5,
-            longitudeDelta: 0.221 * 1.5,
+            latitudeDelta: 0.00622 * 1.5,
+            longitudeDelta: 0.00221 * 1.5,
           };
           this.onRegionChange(region, region.latitude, region.longitude);
         })
@@ -140,10 +140,15 @@ export default class Map extends React.Component {
             <View>
               <MapView.Marker
                 coordinate={marker.coords}
-                title={marker.title}
                 icon={require('../assets/images/marker.png')}>
-                <MapView.Callout style={{ flex: 1, position: 'relative', backgroundColor: colors.APP_BLUE}}>
-                  <CustomCalloutView tooltip={true} marker={marker}/>
+                <MapView.Callout
+                  style={{flex: 1, position: 'relative'}}
+                  onPress={() =>
+                    this.props.navigation.navigate('MovieCard', {
+                      movieID: marker.id,
+                    })
+                  }>
+                  <CustomCalloutView marker={marker} />
                 </MapView.Callout>
               </MapView.Marker>
             </View>

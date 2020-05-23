@@ -1,17 +1,15 @@
 import * as React from 'react';
 import {StyleSheet, Text, TouchableOpacity, Image, View} from 'react-native';
 import colors from '../config/colors';
-import {addItem, removeItem} from '../storage/storageFunctions';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 class FavouriteItem extends React.Component<Props> {
-  render() {
-    const {item, iconName} = this.props;
-    var saved = 'heart';
+  constructor(props) {
+    super(props);
+  }
 
-    //if the movie is saved in user favorite list,
-    //we add a heart icon to the list item
-    return (
+  render() {
+    const {item, itemType} = this.props;
+    return itemType === 'movie' ? (
       <View style={styles.view}>
         <TouchableOpacity style={styles.containerStyle}>
           <Image
@@ -20,7 +18,7 @@ class FavouriteItem extends React.Component<Props> {
               uri: item.urlPoster,
             }}
           />
-          <View style={styles.desc}>
+          <View>
             <Text style={styles.text}>
               {item.title} ({item.year})
             </Text>
@@ -29,23 +27,14 @@ class FavouriteItem extends React.Component<Props> {
             </Text>
           </View>
         </TouchableOpacity>
-
-        {//if the item is already saved in asynstorage display full heart icon
-        iconName === saved ? (
-          <TouchableOpacity
-            onPress={() => {
-              removeItem(item, 'movies');
-            }}>
-            <Icon name={iconName} style={styles.iconStyle} />
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity
-            onPress={() => {
-              addItem(item, 'movies');
-            }}>
-            <Icon name={iconName} style={styles.iconStyle} />
-          </TouchableOpacity>
-        )}
+      </View>
+    ) : (
+      <View style={styles.view}>
+        <TouchableOpacity style={styles.containerStyle}>
+          <View style={styles.desc}>
+            <Text style={styles.text}>{item.location}</Text>
+          </View>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -64,20 +53,11 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 5,
   },
-  iconStyle: {
-    color: colors.APP_BLUE,
-    fontFamily: 'Roboto',
-    fontSize: 24,
-    paddingLeft: 8,
-    paddingRight: 8,
-  },
+
   imageStyle: {
     width: 50,
     height: 70,
     resizeMode: 'stretch',
-  },
-  desc: {
-    flexDirection: 'column',
   },
   iconStyle2: {
     color: colors.APP_BLUE,

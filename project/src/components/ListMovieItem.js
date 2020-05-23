@@ -11,7 +11,7 @@ import colors from '../config/colors';
 import Icon from 'react-native-vector-icons/FontAwesome';
 var width = Dimensions.get('window').width; //full width
 
-class CustomListItem extends React.Component<Props> {
+class ListMovieItem extends React.Component<Props> {
   render() {
     const {item} = this.props;
 
@@ -93,4 +93,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CustomListItem;
+export default ListMovieItem;

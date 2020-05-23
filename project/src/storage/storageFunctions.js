@@ -17,8 +17,8 @@ export const addItem = async (item, collectionName) => {
     //we need to create a new key for the array
     const existingItems = (await AsyncStorage.getItem(collectionName)) || '[]';
     let itemList = JSON.parse(existingItems);
-    console.log('list:', itemList);
-    console.log("item:",JSON.stringify(item));
+    console.log('StorageFunctions.js- > list:', itemList);
+    console.log('StorageFunctions.js- > item:', JSON.stringify(item));
 
     //if the item does not exist in the storage, indexOf will return -1
     let index = itemList.indexOf(JSON.stringify(item));

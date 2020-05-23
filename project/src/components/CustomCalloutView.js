@@ -1,7 +1,8 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import * as React from 'react';
 import colors from '../config/colors';
-import Svg from 'react-native-svg';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {addItem} from '../storage/storageFunctions';
 
 export class CustomCalloutView extends React.Component {
   constructor(props) {
@@ -11,16 +12,30 @@ export class CustomCalloutView extends React.Component {
 
   render() {
     return (
-      <View >
+      <View style={styles.container}>
         <View>
           <Text style={styles.text}>Address: {this.props.marker.address}</Text>
         </View>
+        <View style={styles.buttons}>
+          <TouchableOpacity
+            onPress={() => addItem(this.props.marker, 'locations')}
+            style={styles.myButton}>
+            <Icon name={'heart'} style={styles.iconStyle} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.myButton}>
+            <Icon name={'share-variant'} style={styles.iconStyle} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.myButton}>
+            <Icon name={'map-marker-check'} style={styles.iconStyle} />
+          </TouchableOpacity>
+        </View>
         <View>
-            <Text style={styles.text}>Films here:</Text>
-            <Text style={styles.text}>
-              {this.props.marker.title} ({this.props.marker.year})</Text>
+          <Text style={styles.text}>Films here:</Text>
+          <Text style={styles.text}>
+            {this.props.marker.title} ({this.props.marker.year})
+          </Text>
 
-             <Text>
+          <Text>
             <Image
               style={styles.imageStyle}
               source={{
@@ -34,22 +49,27 @@ export class CustomCalloutView extends React.Component {
   }
 }
 const styles = StyleSheet.create({
-  view: {
+  buttons: {
     flexDirection: 'row',
-    alignItems: 'center', //vertically centered
-    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  containerStyle: {
-    flexDirection: 'row',
-    alignItems: 'center', //vertically centered
-    alignSelf: 'stretch',
-    width: '100%',
-    padding: 5,
+  container: {
+    padding: 10,
+  },
+  myButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 50,
+    width: 50,
+    borderRadius: 100,
+    backgroundColor: colors.APP_BLUE,
+    margin: 5,
   },
   iconStyle: {
-    color: colors.APP_BLUE,
+    color: colors.WHITE,
     fontFamily: 'Roboto',
-    fontSize: 24,
+    fontSize: 20,
     paddingLeft: 8,
     paddingRight: 8,
   },
@@ -70,10 +90,9 @@ const styles = StyleSheet.create({
     height: 25,
   },
   text: {
-    paddingLeft: 10,
     fontFamily: 'Roboto',
-    fontSize: 16,
-    color: colors.WHITE,
+    fontSize: 18,
+    color: colors.APP_BLUE,
     textAlign: 'left',
     height: 25,
   },

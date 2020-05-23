@@ -13,7 +13,7 @@ import {
   connectInfiniteHits,
   connectSearchBox,
 } from 'react-instantsearch/connectors';
-import CustomListItem from '../components/CustomListItem';
+import ListMovieItem from '../components/ListMovieItem';
 import {client} from '../config/firebase';
 import colors from '../config/colors';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -103,7 +103,7 @@ const ConnectedHits = connectInfiniteHits(
                 navigation.navigate('MovieCard', {movieID: item.idIMDB})
               }
               onLongPress={() => addItem(item, 'movies')}>
-              <CustomListItem item={item} />
+              <ListMovieItem item={item} />
             </TouchableOpacity>
           </View>
         )}
