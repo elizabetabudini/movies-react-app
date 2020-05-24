@@ -19,6 +19,7 @@ class AddModifyLocations extends React.Component {
     this.state = {
       newLocation: '',
       buttonText: 'Add to Film Tourist database',
+      oldLocation: '',
     };
   }
   render() {
@@ -37,6 +38,7 @@ class AddModifyLocations extends React.Component {
                 this.setState({
                   newLocation: item.location,
                   buttonText: 'Update Film Tourist database',
+                  oldLocation: item.location,
                 })
               }>
               <ListLocationItem
@@ -78,6 +80,7 @@ class AddModifyLocations extends React.Component {
                     onPress={() =>
                       manageItem(
                         this.state.newLocation,
+                        this.state.oldLocation,
                         firebaseKey,
                         'modify',
                       ).then(this.props.navigation.goBack)
@@ -92,6 +95,7 @@ class AddModifyLocations extends React.Component {
                       this.setState({
                         newLocation: '',
                         buttonText: 'Add to Film Tourist database',
+                        oldLocation: '',
                       })
                     }>
                     Undo

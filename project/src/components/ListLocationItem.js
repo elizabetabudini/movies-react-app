@@ -50,7 +50,9 @@ class ListLocationItem extends React.Component<Props> {
         <View style={{flexDirection: 'row'}}>
           <TouchableOpacity
             onPress={() =>
-              manageItem(item.location, firebaseKey, 'remove')
+              manageItem('', item.location, firebaseKey, 'remove').then(
+                this.props.navigation.goBack,
+              )
             }>
             <Icon name={'trash'} style={styles.iconStyle2} />
           </TouchableOpacity>

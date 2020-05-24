@@ -34,19 +34,17 @@ class MovieCard extends React.Component {
     };
   }
   componentDidMount() {
+    this.navListener = this.props.navigation.addListener(
+      'didFocus',
+      payload => {
+        this.getMovieDetails(this.props.navigation.state.params.movieID);
+      },
+    );
     // used the movie title that's passed in to search for it's details
     this.getMovieDetails(this.props.navigation.state.params.movieID);
   }
 
   async getMovieDetails(movieID) {
-    /*var token = 'de22ca05-8965-497b-b36e-9bf49c579aa2';
-    var url =
-      'https://www.myapifilms.com/imdb/idIMDB?idIMDB=' +
-      movieID +
-      '&token=' +
-      token +
-      '&format=json&filmingLocations=2&actors=1&trailers=1';
-    console.log(url);*/
 
     //find movie from firebase database
     var movie = '';
