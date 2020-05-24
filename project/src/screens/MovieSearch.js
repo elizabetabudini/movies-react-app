@@ -14,7 +14,7 @@ import {
   connectSearchBox,
 } from 'react-instantsearch/connectors';
 import ListMovieItem from '../components/ListMovieItem';
-import {client} from '../config/firebase';
+import {client} from '../config/algolia';
 import colors from '../config/colors';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {addItem} from '../storage/storageFunctions';

@@ -99,22 +99,13 @@ class Login extends React.Component<{}, State> {
             onPress={this.handleLogin}
             disabled={!email || !password}
           />
-
-          <Button1
-            iconName="google"
-            label={strings.GOOGLE_LOGIN}
-            onPress={this.handleLogin}
-            style={{backgroundColor: colors.LIGHT_GRAY}}
-          />
           <View>
             <Text>
-              {' '}
               Don't have an account?{' '}
               <Text
                 onPress={() => this.props.navigation.navigate('SignUp')}
                 style={{color: '#e93766', fontSize: 18}}>
-                {' '}
-                Sign Up{' '}
+                Sign Up
               </Text>
             </Text>
           </View>

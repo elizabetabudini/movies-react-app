@@ -104,7 +104,6 @@ export default class Map extends React.Component {
         })
         .catch(error => console.warn(error));
     } else {
-      console.log('focus on user location');
       //otherwise focus on user location
       this.watchID = Geolocation.watchPosition(position => {
         let region = {

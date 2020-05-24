@@ -12,12 +12,13 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {addItem} from '../storage/storageFunctions';
 import Share from 'react-native-share';
 import Geocoder from 'react-native-geocoding';
-var width = Dimensions.get('window').width; //full width
+import {manageItem} from '../storage/firebaseFunctions';
 
 class ListLocationItem extends React.Component<Props> {
   constructor(props) {
     super(props);
   }
+
   share(location, movieDetails) {
     Geocoder.from(location)
       .then(json => {
@@ -38,8 +39,25 @@ class ListLocationItem extends React.Component<Props> {
       .catch(error => console.warn(error));
   }
   render() {
-    const {iconName, item, movieDetails} = this.props;
-    return (
+    const {item, movieDetails, modify, firebaseKey} = this.props;
+
+    return modify ? (
+      //edit mode, for the user to contribute to locations database
+      <View style={styles.containerStyle}>
+        <View style={styles.desc2}>
+          <Text style={styles.text}>{item.location}</Text>
+        </View>
+        <View style={{flexDirection: 'row'}}>
+          <TouchableOpacity
+            onPress={() =>
+              manageItem(item.location, firebaseKey, 'remove')
+            }>
+            <Icon name={'trash'} style={styles.iconStyle2} />
+          </TouchableOpacity>
+        </View>
+      </View>
+    ) : (
+      //visualize mode, for the user to see locations in movie card screen
       <View style={styles.containerStyle}>
         <TouchableOpacity
           style={styles.desc}
@@ -50,15 +68,16 @@ class ListLocationItem extends React.Component<Props> {
           }>
           <Text style={styles.text}>{item.location}</Text>
         </TouchableOpacity>
+        <View style={{flexDirection: 'row'}}>
+          <TouchableOpacity onPress={() => addItem(item, 'locations')}>
+            <Icon name={'heart-o'} style={styles.iconStyle2} />
+          </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => addItem(item, 'locations')}>
-          <Icon name={iconName} style={styles.iconStyle2} />
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => this.share(item.location, movieDetails)}>
-          <Icon name={'share-alt'} style={styles.iconStyle2} />
-        </TouchableOpacity>
-
+          <TouchableOpacity
+            onPress={() => this.share(item.location, movieDetails)}>
+            <Icon name={'share-alt'} style={styles.iconStyle2} />
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -79,6 +98,13 @@ const styles = StyleSheet.create({
   desc: {
     margin: 5,
     width: '70%',
+    alignItems: 'center', //vertically centered
+    borderColor: colors.APP_BLUE,
+    borderRightWidth: 1,
+  },
+  desc2: {
+    padding: 5,
+    width: '85%',
     alignItems: 'center', //vertically centered
     borderColor: colors.APP_BLUE,
     borderRightWidth: 1,

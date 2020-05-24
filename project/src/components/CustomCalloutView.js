@@ -3,11 +3,11 @@ import * as React from 'react';
 import colors from '../config/colors';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {addItem} from '../storage/storageFunctions';
+import WebView from 'react-native-webview';
 
 export class CustomCalloutView extends React.Component {
   constructor(props) {
     super(props);
-    console.log(props.marker);
   }
 
   render() {
@@ -29,20 +29,17 @@ export class CustomCalloutView extends React.Component {
             <Icon name={'map-marker-check'} style={styles.iconStyle} />
           </TouchableOpacity>
         </View>
-        <View>
-          <Text style={styles.text}>Films here:</Text>
-          <Text style={styles.text}>
+        <View style={{flexDirection: 'row-reverse', marginTop: 10}}>
+          <Text style={styles.title}>
             {this.props.marker.title} ({this.props.marker.year})
           </Text>
-
-          <Text>
-            <Image
-              style={styles.imageStyle}
-              source={{
-                uri: this.props.marker.poster,
-              }}
-            />
-          </Text>
+          <View
+            style={{
+              height: 70,
+              width: 50,
+            }}>
+            <WebView source={{uri: this.props.marker.poster}} />
+          </View>
         </View>
       </View>
     );
@@ -81,19 +78,21 @@ const styles = StyleSheet.create({
   desc: {
     flexDirection: 'column',
   },
-  little: {
-    paddingLeft: 10,
-    fontFamily: 'Roboto',
-    fontSize: 12,
-    color: colors.SILVER,
-    textAlign: 'left',
-    height: 25,
-  },
-  text: {
+  title: {
+    flex: 3,
+    flexWrap: 'wrap',
     fontFamily: 'Roboto',
     fontSize: 18,
+    marginLeft: 10,
     color: colors.APP_BLUE,
     textAlign: 'left',
-    height: 25,
+  },
+  text: {
+    flex: 1,
+    flexWrap: 'wrap',
+    fontFamily: 'Roboto',
+    fontSize: 15,
+    color: colors.APP_BLUE,
+    textAlign: 'left',
   },
 });

@@ -68,12 +68,8 @@ const styles = StyleSheet.create({
   },
   desc: {
     flexDirection: 'column',
-  },
-  iconStyle2: {
-    color: colors.APP_BLUE,
-    fontFamily: 'Roboto',
-    fontSize: 22,
-    margin: 10,
+    alignContent: 'center',
+    flex: 1,
   },
   little: {
     paddingLeft: 10,
@@ -81,15 +77,17 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: colors.SILVER,
     textAlign: 'left',
-    height: 25,
+    height: 35,
   },
   text: {
+    marginTop: 10,
+    flexWrap: 'wrap',
+    flex: 1,
     paddingLeft: 10,
     fontFamily: 'Roboto',
     fontSize: 16,
     color: colors.APP_BLUE,
     textAlign: 'left',
-    height: 25,
   },
 });
 

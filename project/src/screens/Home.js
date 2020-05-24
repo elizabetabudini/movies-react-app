@@ -24,6 +24,7 @@ import {Button, ListItem} from 'react-native-elements';
 import {auth} from '../config/firebase';
 import colors from '../config/colors';
 import {Drawer} from 'react-native-paper';
+import AddModifyLocations from './AddModifyLocations';
 
 const nav = createStackNavigator(
   {
@@ -34,6 +35,12 @@ const nav = createStackNavigator(
       },
     },
     MovieCard: MovieCard,
+    AddModify: {
+      screen: AddModifyLocations,
+      navigationOptions: {
+        headerShown: false,
+      },
+    },
   },
   {
     initialRouteName: 'MovieSearch',

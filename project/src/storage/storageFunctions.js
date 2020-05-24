@@ -1,9 +1,5 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import {RNToasty} from 'react-native-toasty'
-
-export const isSaved = async (item, collectionName) => {
-  return true;
-};
+import {RNToasty} from 'react-native-toasty';
 
 /**
  * Add a given item to the collection in storage

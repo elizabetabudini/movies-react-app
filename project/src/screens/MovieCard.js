@@ -8,9 +8,11 @@ import {
   SafeAreaView,
   FlatList,
 } from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import colors from '../config/colors';
 import ListLocationItem from '../components/ListLocationItem';
+import {Icon} from 'react-native-elements';
+import WebView from 'react-native-webview';
+import {database} from '../config/firebase';
 
 class MovieCard extends React.Component {
   static navigationOptions = {
@@ -25,6 +27,10 @@ class MovieCard extends React.Component {
       movieDetails: {},
       locationList: [],
       isLoading: true,
+      actors: '',
+      directors: '',
+      genres: '',
+      firebaseKey: '',
     };
   }
   componentDidMount() {
@@ -32,30 +38,63 @@ class MovieCard extends React.Component {
     this.getMovieDetails(this.props.navigation.state.params.movieID);
   }
 
-  getMovieDetails(movieID) {
-    var token = 'de22ca05-8965-497b-b36e-9bf49c579aa2';
+  async getMovieDetails(movieID) {
+    /*var token = 'de22ca05-8965-497b-b36e-9bf49c579aa2';
     var url =
       'https://www.myapifilms.com/imdb/idIMDB?idIMDB=' +
       movieID +
-      '&token=de22ca05-8965-497b-b36e-9bf49c579aa2&format=json&filmingLocations=2';
+      '&token=' +
+      token +
+      '&format=json&filmingLocations=2&actors=1&trailers=1';
+    console.log(url);*/
 
-    //get data from myfilm api
-    fetch(url)
-      .then(response => response.json())
-      .then(json => {
-        this.setState({movieDetails: json.data.movies[0]});
-        this.setState({locationList: json.data.movies[0].filmingLocations});
-        console.log(this.state.locationList);
-      })
-      .catch(error => console.error(error))
-      .finally(() => {
-        this.setState({isLoading: false});
+    //find movie from firebase database
+    var movie = '';
+    var firebaseK = '';
+    await database
+      .ref('/movies')
+      .orderByChild('idIMDB')
+      .equalTo(movieID)
+      .on('value', function(snapshot) {
+        for (const key in snapshot.val()) {
+          movie = snapshot.val()[key];
+          firebaseK = key;
+        }
       });
+    this.setState({firebaseKey: firebaseK});
+    this.setState({movieDetails: movie});
+
+    //new IDs created when user adds a new location are not recognized by React Native so we use Object.values
+    this.setState({locationList: Object.values(movie.filmingLocations)});
+
+    var directors = [];
+    //extract director names and separate with comma
+    directors = movie.directors.map(item => item.name).join(', ');
+    this.setState({directors: directors});
+
+    var genres = [];
+    //extract genres names and separate with comma
+    genres = movie.genres.join(' | ');
+    this.setState({genres: genres});
+
+    var actors = [];
+    //extract actors names and separate with comma
+    actors = movie.actors.map(item => item.actorName).join(', ');
+    this.setState({actors: actors});
+
+    this.setState({isLoading: false});
   }
 
   render() {
     const {navigation} = this.props;
-    const {isLoading, movieDetails} = this.state;
+    const {
+      isLoading,
+      movieDetails,
+      directors,
+      actors,
+      genres,
+      firebaseKey,
+    } = this.state;
     return isLoading ? (
       <ActivityIndicator />
     ) : (
@@ -67,25 +106,45 @@ class MovieCard extends React.Component {
           renderItem={({item}) => (
             <ListLocationItem
               item={item}
-              movieDetails={movieDetails}
-              iconName={'heart-o'}
+              modify={false}
+              action={'display'}
               navigation={navigation}
             />
           )}
           ListHeaderComponent={
             <View>
-              <Image
+              <WebView
                 style={styles.imageStyle}
+                javaScriptEnabled={true}
                 source={{
-                  uri: this.state.movieDetails.urlPoster,
+                  uri: movieDetails.trailer.qualities[0].videoURL,
                 }}
               />
+
               <Text style={styles.textStyle}>
                 {movieDetails.title} ({movieDetails.year})
               </Text>
-              <Text style={styles.textStyle}>
-                {movieDetails.filmingLocations.length} filming locations found:
-              </Text>
+              <Text style={styles.little}>Directed by {directors}</Text>
+              <Text style={styles.little}>Actors: {actors}</Text>
+              <Text style={styles.little}>Genres: {genres}</Text>
+              <View style={styles.locations}>
+                <Text style={styles.textStyle}>
+                  {movieDetails.filmingLocations.length} filming locations
+                  found:
+                </Text>
+                <Icon
+                  raised
+                  name="pencil-plus"
+                  color={colors.APP_BLUE}
+                  type={'material-community'}
+                  onPress={() =>
+                    navigation.navigate('AddModify', {
+                      firebaseKey: firebaseKey,
+                      movie: movieDetails,
+                    })
+                  }
+                />
+              </View>
             </View>
           }
         />
@@ -95,6 +154,13 @@ class MovieCard extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  locations: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderTopWidth: 0.5,
+    borderTopColor: colors.LIGHT_GRAY,
+    margin: 10,
+  },
   container: {
     flex: 1,
     backgroundColor: colors.APP_BLUE,
@@ -104,6 +170,14 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'justify',
     margin: 10,
+  },
+  little: {
+    color: colors.WHITE,
+    fontSize: 13,
+    textAlign: 'justify',
+    marginLeft: 10,
+    marginRight: 10,
+    marginBottom: 10,
   },
   imageStyle: {
     width: '100%',
