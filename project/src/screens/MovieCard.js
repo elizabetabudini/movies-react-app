@@ -4,7 +4,6 @@ import {
   Text,
   ActivityIndicator,
   View,
-  Image,
   SafeAreaView,
   FlatList,
 } from 'react-native';
@@ -13,6 +12,7 @@ import ListLocationItem from '../components/ListLocationItem';
 import {Icon} from 'react-native-elements';
 import WebView from 'react-native-webview';
 import {database} from '../config/firebase';
+import {addItem} from '../storage/storageFunctions';
 
 class MovieCard extends React.Component {
   static navigationOptions = {
@@ -31,6 +31,7 @@ class MovieCard extends React.Component {
       directors: '',
       genres: '',
       firebaseKey: '',
+      nLocations: '',
     };
   }
   componentDidMount() {
@@ -45,7 +46,6 @@ class MovieCard extends React.Component {
   }
 
   async getMovieDetails(movieID) {
-
     //find movie from firebase database
     var movie = '';
     var firebaseK = '';
@@ -64,6 +64,7 @@ class MovieCard extends React.Component {
 
     //new IDs created when user adds a new location are not recognized by React Native so we use Object.values
     this.setState({locationList: Object.values(movie.filmingLocations)});
+    this.setState({nLocations: Object.values(movie.filmingLocations).length});
 
     var directors = [];
     //extract director names and separate with comma
@@ -92,6 +93,7 @@ class MovieCard extends React.Component {
       actors,
       genres,
       firebaseKey,
+      nLocations,
     } = this.state;
     return isLoading ? (
       <ActivityIndicator />
@@ -119,16 +121,24 @@ class MovieCard extends React.Component {
                 }}
               />
 
-              <Text style={styles.textStyle}>
-                {movieDetails.title} ({movieDetails.year})
-              </Text>
+              <View>
+                <Text style={styles.textStyle}>
+                  {movieDetails.title} ({movieDetails.year})
+                  <Icon
+                    raised
+                    name="heart-o"
+                    color={colors.APP_BLUE}
+                    type={'material-community'}
+                    onPress={() => addItem(movieDetails, 'movies')}
+                  />
+                </Text>
+              </View>
               <Text style={styles.little}>Directed by {directors}</Text>
               <Text style={styles.little}>Actors: {actors}</Text>
               <Text style={styles.little}>Genres: {genres}</Text>
               <View style={styles.locations}>
                 <Text style={styles.textStyle}>
-                  {movieDetails.filmingLocations.length} filming locations
-                  found:
+                  {nLocations} filming locations found:
                 </Text>
                 <Icon
                   raised
