@@ -30,7 +30,7 @@ export const manageItem = async (
 
   const locationAdd = {
     location: newLocation,
-    remark: '',
+    remarks: '',
   };
   console.log('key firebase location:', locK);
   if (locK === '') {

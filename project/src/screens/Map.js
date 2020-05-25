@@ -1,17 +1,12 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {
-  AppRegistry,
   StyleSheet,
-  Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import MapView from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import Geocoder from 'react-native-geocoding';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {CustomCalloutView} from '../components/CustomCalloutView';
-import colors from '../config/colors';
 
 Geolocation.getCurrentPosition(info => console.log('current position:', info));
 Geocoder.init('AIzaSyBWeYmaWDQotGB_BjI_x69LbE0NDIRJ4ck', {language: 'en'});
@@ -35,7 +30,7 @@ export default class Map extends React.Component {
         this.updateMap();
       },
     );
-    await this.getMarkers();
+    this.getMarkers();
   }
 
   async getMarkers() {
@@ -55,28 +50,33 @@ export default class Map extends React.Component {
       .finally(() => {
         //for each movie get list of locations
         movieList.forEach(item => {
+          var locations = Object.values(item.filmingLocations);
+
           //for each location find coordinates based on address
-          item.filmingLocations.forEach(loc => {
-            //get coords from address using Geocoder
-            Geocoder.from(loc.location)
-              .then(json => {
-                var coords = json.results[0].geometry.location;
-                const location = {
-                  address: loc.location,
-                  coords: {latitude: coords.lat, longitude: coords.lng},
-                  title: item.title,
-                  poster: item.urlPoster,
-                  year: item.year,
-                  id: item.idIMDB,
-                };
-                locationList.push(location);
-              })
-              .catch(error => console.warn(error))
-              .finally(() =>
-                this.setState({markers: locationList}, function() {
-                  //console.log(this.state.markers);
-                }),
-              );
+          locations.forEach(loc => {
+            if (loc !== null) {
+              //get coords from address using Geocoder
+              Geocoder.from(loc.location)
+                .then(json => {
+                  var coords = json.results[0].geometry.location;
+                  const location = {
+                    address: loc.location,
+                    coords: {latitude: coords.lat, longitude: coords.lng},
+                    title: item.title,
+                    poster: item.urlPoster,
+                    year: item.year,
+                    id: item.idIMDB,
+                  };
+                  locationList.push(location);
+                })
+                .catch(error => console.warn(error))
+                .finally(() =>
+                  this.setState({markers: locationList}, function() {
+                    //console.log(this.state.markers);
+                    this.updateMap();
+                  }),
+                );
+            }
           });
         });
       });
@@ -105,7 +105,7 @@ export default class Map extends React.Component {
         .catch(error => console.warn(error));
     } else {
       //otherwise focus on user location
-      this.watchID = Geolocation.watchPosition(position => {
+      Geolocation.watchPosition(position => {
         let region = {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
