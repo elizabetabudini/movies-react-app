@@ -26,6 +26,15 @@ import colors from '../config/colors';
 import {Drawer} from 'react-native-paper';
 import AddModifyLocations from './AddModifyLocations';
 
+/**
+ *  Main navigation of the app
+ *  Creates the nested navigation architecture
+ *
+ *  Author: Elizabeta Budini
+ *  Date: 25/05/2020
+ *
+ *  */
+
 const nav = createStackNavigator(
   {
     MovieSearch: {

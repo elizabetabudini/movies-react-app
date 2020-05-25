@@ -23,6 +23,16 @@ interface State {
   errorMessage: null;
 }
 
+/**
+ *  Login screen
+ *  User will input email and password to login
+ *  or click Signup to navigate to SignUp.js
+ *
+ *  Author: Elizabeta Budini
+ *  modiefied from https://github.com/mmazzarolo/the-starter-app/
+ *  Date: 25/05/2020
+ *
+ *  */
 class Login extends React.Component<{}, State> {
   passwordInputRef = React.createRef();
 
@@ -55,7 +65,6 @@ class Login extends React.Component<{}, State> {
       .catch(error => this.setState({errorMessage: error.message}));
   };
 
-  //modiefied from https://github.com/mmazzarolo/the-starter-app/
   render() {
     const {email, password, emailTouched, passwordTouched} = this.state;
     const emailError =

@@ -13,6 +13,17 @@ import FormTextInput from '../components/FormTextInput';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {manageItem} from '../storage/firebaseFunctions';
 
+/**
+ *  AddModifyLocations gives the user the opportunity to
+ *  contribute to the locations database for the given movie.
+ *  The user can access this screen by clicking on the pencil icon
+ *  in the MovieCard.js screen.
+ *
+ *  Author: Elizabeta Budini
+ *  Date: 25/05/2020
+ *
+ *  */
+
 class AddModifyLocations extends React.Component {
   constructor(props) {
     super(props);
@@ -25,7 +36,7 @@ class AddModifyLocations extends React.Component {
   render() {
     var firebaseKey = this.props.navigation.state.params.firebaseKey;
     var movie = this.props.navigation.state.params.movie;
-      console.log('AddModify.js -> firebase key: ', firebaseKey);
+    console.log('AddModify.js -> firebase key: ', firebaseKey);
     return (
       <View style={{backgroundColor: colors.APP_BLUE}}>
         <FlatList

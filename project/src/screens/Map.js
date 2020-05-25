@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  StyleSheet,
-  View,
-} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import MapView from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import Geocoder from 'react-native-geocoding';
@@ -10,6 +7,18 @@ import {CustomCalloutView} from '../components/CustomCalloutView';
 
 Geolocation.getCurrentPosition(info => console.log('current position:', info));
 Geocoder.init('AIzaSyBWeYmaWDQotGB_BjI_x69LbE0NDIRJ4ck', {language: 'en'});
+
+/**
+ *  Map screen
+ *  When the screen is shown without a given location prop,
+ *  the map will focus on user location, otherwise
+ *  it will focus on the passed location. The markers are rendered the
+ *  first time the screen is rendered.
+ *
+ *  Author: Elizabeta Budini
+ *  Date: 25/05/2020
+ *
+ *  */
 
 export default class Map extends React.Component {
   constructor(props) {

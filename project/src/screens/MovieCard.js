@@ -14,13 +14,24 @@ import WebView from 'react-native-webview';
 import {database} from '../config/firebase';
 import {addItem} from '../storage/storageFunctions';
 
+/**
+ *  Movie details screen
+ *  It is displayed when the user click on a movie to get the details
+ *  The trailer will start automatically when loaded, the below the trailer
+ *  there will be the movie title, directors, actors, genres and a list
+ *  of locations that can be modified by the user (user contribution to
+ *  app database)
+ *
+ *  Author: Elizabeta Budini
+ *  Date: 25/05/2020
+ *
+ *  */
 class MovieCard extends React.Component {
   static navigationOptions = {
     title: 'Movie details',
     headerShown: true,
   };
 
-  // you can use the Component's constructor for setting up props and states
   constructor(props) {
     super(props);
     this.state = {
@@ -106,6 +117,7 @@ class MovieCard extends React.Component {
           renderItem={({item}) => (
             <ListLocationItem
               item={item}
+              movieDetails={movieDetails}
               modify={false}
               action={'display'}
               navigation={navigation}
@@ -121,17 +133,17 @@ class MovieCard extends React.Component {
                 }}
               />
 
-              <View>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <Text style={styles.textStyle}>
                   {movieDetails.title} ({movieDetails.year})
-                  <Icon
-                    raised
-                    name="heart-o"
-                    color={colors.APP_BLUE}
-                    type={'material-community'}
-                    onPress={() => addItem(movieDetails, 'movies')}
-                  />
                 </Text>
+                <Icon
+                  raised
+                  name="heart"
+                  color={colors.APP_BLUE}
+                  type={'material-community'}
+                  onPress={() => addItem(movieDetails, 'movies')}
+                />
               </View>
               <Text style={styles.little}>Directed by {directors}</Text>
               <Text style={styles.little}>Actors: {actors}</Text>

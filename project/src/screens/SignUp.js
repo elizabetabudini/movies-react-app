@@ -8,6 +8,17 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {auth} from '../config/firebase';
+
+/**
+ *  SignUp screen
+ *  The user can create a new account by entering an
+ *  email and a new password. The signup button
+ *  will redirect to the logged-in home screen (Map)
+ *
+ *  Author: Elizabeta Budini
+ *  Date: 25/05/2020
+ *
+ *  */
 export default class SignUp extends Component {
   state = {email: '', password: '', errorMessage: null};
   handleSignUp = () => {

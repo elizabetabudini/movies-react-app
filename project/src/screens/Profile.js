@@ -20,7 +20,14 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Share from 'react-native-share';
 import colors from '../config/colors';
 
-let facebookParameters = '';
+/**
+ *  Profile screen
+ *  Gets saved movies and saved items from AsyncStorage
+ *
+ *  Author: Elizabeta Budini
+ *  Date: 25/05/2020
+ *
+ *  */
 export default class Profile extends Component {
   constructor(props) {
     super(props);
@@ -167,7 +174,6 @@ export default class Profile extends Component {
       if (collectionName === 'movies') {
         this.setState({movieList: items});
       } else {
-        console.log('Profile.js -> Locations:', items);
         this.setState({locationsList: items});
       }
     }

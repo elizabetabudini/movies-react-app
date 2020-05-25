@@ -17,9 +17,15 @@ import {manageItem} from '../storage/firebaseFunctions';
 class ListLocationItem extends React.Component<Props> {
   constructor(props) {
     super(props);
+    this.state = {
+      movieDetails: '',
+    };
+  }
+  componentDidMount() {
+    this.setState({movieDetails: this.props.movieDetails});
   }
 
-  share(location, movieDetails) {
+  share(location) {
     Geocoder.from(location)
       .then(json => {
         var coords = json.results[0].geometry.location;
@@ -27,7 +33,7 @@ class ListLocationItem extends React.Component<Props> {
           'https://www.google.com/maps/?q=' + coords.lat + ',' + coords.lng;
         Share.open({
           url: url,
-          message: movieDetails.title + ' was filmed here!',
+          message: this.state.movieDetails.title + ' was filmed here!',
         })
           .then(res => {
             console.log(res);
@@ -39,8 +45,7 @@ class ListLocationItem extends React.Component<Props> {
       .catch(error => console.warn(error));
   }
   render() {
-    const {item, movieDetails, modify, firebaseKey} = this.props;
-
+    const {item, modify, firebaseKey} = this.props;
     return modify ? (
       //edit mode, for the user to contribute to locations database
       <View style={styles.containerStyle}>
@@ -75,8 +80,7 @@ class ListLocationItem extends React.Component<Props> {
             <Icon name={'heart-o'} style={styles.iconStyle2} />
           </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => this.share(item.location, movieDetails)}>
+          <TouchableOpacity onPress={() => this.share(item.location)}>
             <Icon name={'share-alt'} style={styles.iconStyle2} />
           </TouchableOpacity>
         </View>

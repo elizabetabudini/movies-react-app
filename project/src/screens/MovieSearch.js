@@ -1,11 +1,5 @@
 import React, {Component} from 'react';
-import {
-  Dimensions,
-  FlatList,
-  StyleSheet,
-  TextInput,
-  View,
-} from 'react-native';
+import {Dimensions, FlatList, StyleSheet, TextInput, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import PropTypes from 'prop-types';
 import {InstantSearch} from 'react-instantsearch/native';
@@ -21,6 +15,17 @@ import {addItem} from '../storage/storageFunctions';
 
 var width = Dimensions.get('window').width; //full width
 
+/**
+ *  Search screen
+ *  Based on Algolia search tool
+ *  Search a movie by title or director and
+ *  click on it to navigate to the movie details screen
+ *
+ *  Author: Elizabeta Budini
+ *  Adapted from https://blog.expo.io/using-algolia-to-implement-search-within-an-expo-firebase-project-da66e3aa8239
+ *  Date: 25/05/2020
+ *
+ *  */
 export default class MovieSearch extends React.Component {
   constructor() {
     super();
@@ -30,7 +35,6 @@ export default class MovieSearch extends React.Component {
     this.props.navigation.navigate('MovieCard', {movie: item});
   }
 
-  //Adapted from https://blog.expo.io/using-algolia-to-implement-search-within-an-expo-firebase-project-da66e3aa8239
   /*
     InstantSearch is a Algolia Componenet to search in a Firebase database which doesn't have indexing
      */

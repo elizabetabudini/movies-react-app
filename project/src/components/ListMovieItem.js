@@ -14,9 +14,6 @@ var width = Dimensions.get('window').width; //full width
 class ListMovieItem extends React.Component<Props> {
   render() {
     const {item} = this.props;
-
-    //if the movie is saved in user favorite list,
-    //we add a heart icon to the list item
     return (
       <View style={styles.view}>
         <TouchableOpacity style={styles.containerStyle}>
@@ -52,7 +49,6 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     width: '100%',
     padding: 5,
-
   },
   iconStyle: {
     color: colors.APP_BLUE,
